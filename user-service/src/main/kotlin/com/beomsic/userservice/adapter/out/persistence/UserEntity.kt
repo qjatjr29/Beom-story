@@ -37,7 +37,6 @@ data class UserEntity (
     fun toDomain() = User(
         id = id,
         email = email,
-        password = password,
         username = username,
         profileUrl = profileUrl,
         createdAt = createdAt!!,
