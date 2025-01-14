@@ -13,10 +13,16 @@ dependencies {
 
     implementation("at.favre.lib:bcrypt:0.9.0")
 
+    // common module
+    implementation(project(":common-service"))
+
     // database
     implementation("io.asyncer:r2dbc-mysql:1.0.4")
     testRuntimeOnly("io.r2dbc:r2dbc-h2")
     testImplementation("io.r2dbc:r2dbc-h2")
+
+    // test
+    testImplementation("io.mockk:mockk:1.13.14")
 }
 
 val springCloudVersion = "2024.0.0"
