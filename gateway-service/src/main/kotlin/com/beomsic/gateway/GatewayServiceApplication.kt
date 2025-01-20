@@ -1,4 +1,4 @@
-package com.beomsic.beomstory
+package com.beomsic.gateway
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
