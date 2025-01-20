@@ -13,7 +13,7 @@ class UserLoginAdapter(
     private val jwtTokenProvider: JwtTokenProvider
 ): UserLoginPort {
 
-    override suspend fun login(userId: Long, email: String): Token {
+    override suspend fun login(userId: Long, email: String): String {
         redisTemplate.delete("logoutlist:$userId")
         val token = jwtTokenProvider.createToken(userId, email)
 
@@ -24,7 +24,7 @@ class UserLoginAdapter(
                 jwtTokenProvider.getRefreshTokenExpiresTime(),
                 TimeUnit.MILLISECONDS)
 
-        return token
+        return token.accessToken
     }
 
     override suspend fun reissue(refreshToken: String): String {

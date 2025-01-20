@@ -6,3 +6,8 @@ data class SignUpRequest (
     val username: String,
     val profileUrl: String? = null,
 )
+
+data class LoginRequest (
+    val email: String,
+    val password: String,
+)

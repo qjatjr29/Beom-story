@@ -24,3 +24,10 @@ data class UserDetailResponse (
         }
     }
 }
+
+data class UserLoginResponse (
+    val id: Long,
+    val email: String,
+    val username: String,
+    val accessToken: String,
+)

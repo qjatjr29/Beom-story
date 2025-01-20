@@ -23,14 +23,13 @@ class UserLoginService(
             throw PasswordNotMatchedException()
         }
 
-        val token = userLoginPort.login(userId = user.id!!, email = user.email)
+        val accessToken = userLoginPort.login(userId = user.id!!, email = user.email)
 
         return UserLoginResponse(
             id = user.id,
             email = user.email,
             username = user.username,
-            accessToken = token.accessToken,
-            refreshToken = token.refreshToken,
+            accessToken = accessToken,
         )
     }
 
