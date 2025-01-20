@@ -1,7 +1,7 @@
 package com.beomsic.userservice.adapter.`in`.web
 
 import com.beomsic.userservice.domain.exception.ServerException
-import exception.ErrorResponse
+import com.beomsic.common.exception.ErrorResponse
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

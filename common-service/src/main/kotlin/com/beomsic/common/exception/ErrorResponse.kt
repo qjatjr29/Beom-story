@@ -1,4 +1,4 @@
-package exception
+package com.beomsic.common.exception
 
 data class ErrorResponse (
     var code: Int,
