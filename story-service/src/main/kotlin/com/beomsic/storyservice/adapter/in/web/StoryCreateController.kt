@@ -16,12 +16,12 @@ class StoryCreateController(
     private val storyCreateUseCase: StoryCreateUseCase
 ) {
 
-    @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     suspend fun createStory(
         @AuthToken authUser: AuthUser,
         @RequestPart(value = "story") request: StoryCreateRequest,
-        @RequestPart(value = "file", required = false) images: List<MultipartFile>) {
+        @RequestParam(value = "images", required = false) images: List<MultipartFile>) {
         val storyCreateCommand = StoryCreateCommand(
             authorId = authUser.id,
             title = request.title,
