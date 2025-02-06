@@ -9,7 +9,7 @@ class StoryCreateAdapter(
     private val storyRepository: StoryRepository
 ): StoryCreatePort {
 
-    override suspend fun create(command: StoryCreateCommand) {
+    override suspend fun create(command: StoryCreateCommand): StoryEntity {
         val entity = StoryEntity(
             authorId = command.authorId,
             title = command.title,
@@ -17,6 +17,6 @@ class StoryCreateAdapter(
             startDate = command.startDate,
             endDate = command.endDate
         )
-        storyRepository.save(entity)
+        return storyRepository.save(entity)
     }
 }
