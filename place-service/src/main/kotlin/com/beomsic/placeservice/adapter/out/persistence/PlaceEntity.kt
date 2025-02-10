@@ -22,6 +22,9 @@ data class PlaceEntity(
     val description: String?,
 
     @Column
+    val imageUrl: String?,
+
+    @Column
     val category: Category? = Category.기타,
 
     @Column
@@ -35,6 +38,7 @@ data class PlaceEntity(
             id = id,
             storyId = storyId,
             name = name,
+            imageUrl = imageUrl,
             description = description,
             category = category,
             latitude = latitude,

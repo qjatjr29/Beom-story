@@ -5,6 +5,7 @@ data class Place (
     val storyId: Long,
     val name: String,
     val description: String?,
+    val imageUrl: String?,
     val category: Category? = Category.기타,
     val latitude: Double?,
     val longitude: Double?,

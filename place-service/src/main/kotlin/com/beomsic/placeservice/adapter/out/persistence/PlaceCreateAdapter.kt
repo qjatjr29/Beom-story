@@ -15,6 +15,7 @@ class PlaceCreateAdapter(
             storyId = command.storyId,
             name = command.name,
             description = command.description,
+            imageUrl = command.imageUrl,
             category = command.category?.let { Category.valueOf(it) },
             latitude = command.latitude,
             longitude = command.longitude

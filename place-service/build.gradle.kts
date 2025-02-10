@@ -8,14 +8,15 @@ dependencies {
     // spring cloud
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
-//    kapt("org.springframework.boot:spring-boot-configuration-processor")
+    // kafka
+    implementation("org.springframework.kafka:spring-kafka:3.3.2")
 
     // common module
     implementation(project(":common-service"))
 
     // database
     implementation("io.asyncer:r2dbc-mysql:1.0.4")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+//    implementation("org.springframework.boot:spring-boot-starter-data-redis")
     testRuntimeOnly("io.r2dbc:r2dbc-h2")
     testImplementation("io.r2dbc:r2dbc-h2")
 

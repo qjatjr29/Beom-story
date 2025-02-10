@@ -4,6 +4,9 @@ import com.beomsic.placeservice.application.port.`in`.command.PlaceCreateCommand
 import com.beomsic.placeservice.application.port.`in`.usecase.PlaceCreateUseCase
 import com.beomsic.placeservice.domain.Place
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.http.codec.multipart.FilePart
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -12,11 +15,13 @@ class PlaceCreateController(
     private val placeCreateUseCase: PlaceCreateUseCase
 ) {
 
-    @PostMapping
+    @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
-    suspend fun create(@RequestBody request: PlaceCreateRequest): Place {
+    suspend fun create(@RequestPart request: PlaceCreateRequest,
+                       @RequestPart(required = false) image: FilePart): ResponseEntity<Place> {
         val command = request.toCreateCommand()
-        return placeCreateUseCase.execute(command)
+        val place = placeCreateUseCase.execute(command, image)
+        return ResponseEntity.status(HttpStatus.CREATED).body(place)
     }
 
     private fun PlaceCreateRequest.toCreateCommand(): PlaceCreateCommand {
