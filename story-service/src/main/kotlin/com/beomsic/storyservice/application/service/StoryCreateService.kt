@@ -17,6 +17,7 @@ class StoryCreateService(
     @Transactional
     override suspend fun execute(storyCreateCommand: StoryCreateCommand): Story {
         userWebClient.findById(storyCreateCommand.authorId)
-        return storyCreatePort.create(storyCreateCommand).toDomain()
+        val storyEntity = storyCreatePort.create(storyCreateCommand)
+        return storyEntity.toDomain()
     }
 }
