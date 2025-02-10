@@ -1,17 +1,28 @@
 dependencies {
-//    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+//    implementation("io.projectreactor:reactor-core")
 
     // spring cloud
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
-//    kapt("org.springframework.boot:spring-boot-configuration-processor")
+    // aws
+    implementation("software.amazon.awssdk:s3:2.30.11")
+    implementation("software.amazon.awssdk:netty-nio-client:2.30.11")
+
+    // kafka
+    implementation("org.springframework.kafka:spring-kafka:3.3.2")
 
     // common module
     implementation(project(":common-service"))
+
+    // database
+//    implementation("io.asyncer:r2dbc-mysql:1.0.4")
+//    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+//    testRuntimeOnly("io.r2dbc:r2dbc-h2")
+//    testImplementation("io.r2dbc:r2dbc-h2")
 
     // test
     testImplementation("io.mockk:mockk:1.13.14")
