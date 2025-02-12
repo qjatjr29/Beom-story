@@ -1,5 +1,7 @@
 package com.beomsic.placeservice.adapter.`in`.web
 
+import com.beomsic.common.annotation.AuthToken
+import com.beomsic.common.model.AuthUser
 import com.beomsic.placeservice.application.port.`in`.command.PlaceCreateCommand
 import com.beomsic.placeservice.application.port.`in`.usecase.PlaceCreateUseCase
 import com.beomsic.placeservice.domain.Place
@@ -17,16 +19,20 @@ class PlaceCreateController(
 
     @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
-    suspend fun create(@RequestPart request: PlaceCreateRequest,
-                       @RequestPart(required = false) image: FilePart): ResponseEntity<Place> {
-        val command = request.toCreateCommand()
+    suspend fun create(
+        @AuthToken authUser: AuthUser,
+        @RequestPart request: PlaceCreateRequest,
+        @RequestPart(required = false) image: FilePart): ResponseEntity<Place> {
+
+        val command = request.toCreateCommand(authUser.id)
         val place = placeCreateUseCase.execute(command, image)
         return ResponseEntity.status(HttpStatus.CREATED).body(place)
     }
 
-    private fun PlaceCreateRequest.toCreateCommand(): PlaceCreateCommand {
+    private fun PlaceCreateRequest.toCreateCommand(authorId: Long): PlaceCreateCommand {
         return PlaceCreateCommand(
             storyId = this.storyId,
+            authorId = authorId,
             name = this.name,
             description = this.description,
             category = this.category,

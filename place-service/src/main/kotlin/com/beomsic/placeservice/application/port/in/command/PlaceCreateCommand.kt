@@ -2,6 +2,7 @@ package com.beomsic.placeservice.application.port.`in`.command
 
 data class PlaceCreateCommand (
     val storyId: Long,
+    val authorId: Long,
     val name: String,
     val description: String?,
     var imageUrl: String? = null,

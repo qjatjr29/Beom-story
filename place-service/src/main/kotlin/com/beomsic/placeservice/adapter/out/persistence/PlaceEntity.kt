@@ -16,6 +16,9 @@ data class PlaceEntity(
     val storyId: Long,
 
     @Column
+    val authorId: Long,
+
+    @Column
     val name: String,
 
     @Column
@@ -37,6 +40,7 @@ data class PlaceEntity(
         return Place(
             id = id,
             storyId = storyId,
+            authorId = authorId,
             name = name,
             imageUrl = imageUrl,
             description = description,

@@ -13,6 +13,7 @@ class PlaceCreateAdapter(
     override suspend fun create(command: PlaceCreateCommand): PlaceEntity {
         val entity = PlaceEntity(
             storyId = command.storyId,
+            authorId = command.authorId,
             name = command.name,
             description = command.description,
             imageUrl = command.imageUrl,

@@ -3,6 +3,7 @@ package com.beomsic.placeservice.domain
 data class Place (
     val id: Long? = null,
     val storyId: Long,
+    val authorId: Long,
     val name: String,
     val description: String?,
     val imageUrl: String?,
