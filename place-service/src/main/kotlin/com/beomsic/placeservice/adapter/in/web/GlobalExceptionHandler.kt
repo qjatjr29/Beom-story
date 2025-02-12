@@ -1,6 +1,7 @@
 package com.beomsic.placeservice.adapter.`in`.web
 
 import com.beomsic.common.exception.ErrorResponse
+import com.beomsic.placeservice.domain.exception.PlaceException
 import mu.KotlinLogging
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -24,5 +25,11 @@ class GlobalExceptionHandler {
     fun handlerException(ex: Exception): Mono<ResponseEntity<ErrorResponse>> {
         logger.error(ex.message, ex)
         return Mono.just(ResponseEntity.internalServerError().body(ErrorResponse(500, ex.message.toString())))
+    }
+
+    @ExceptionHandler(PlaceException::class)
+    fun handlerException(ex: PlaceException): Mono<ResponseEntity<ErrorResponse>> {
+        logger.error(ex.message, ex)
+        return Mono.just(ResponseEntity.internalServerError().body(ErrorResponse(ex.code, ex.message)))
     }
 }
