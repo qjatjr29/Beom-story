@@ -6,10 +6,10 @@ import com.beomsic.placeservice.application.port.`in`.command.PlaceCreateCommand
 import com.beomsic.placeservice.application.port.`in`.usecase.PlaceCreateUseCase
 import com.beomsic.placeservice.application.port.out.PlaceCreatePort
 import com.beomsic.placeservice.domain.Place
+import com.beomsic.placeservice.domain.exception.ServerException
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.lang.RuntimeException
 
 @Service
 class PlaceCreateService(
@@ -33,14 +33,13 @@ class PlaceCreateService(
             if (uploadedImageUrl != null) {
                 placeEventService.publishDeleteImageEvent(ImageDeleteEvent(uploadedImageUrl))
             }
-            throw ex
+            throw ServerException(ex.message ?: "Server Exception", ex)
         }
     }
 
     @Transactional
     private suspend fun transactionalCreatePlace(command: PlaceCreateCommand): Place {
         val placeEntity = placeCreatePort.create(command)
-        throw RuntimeException()
         return placeEntity.toDomain()
     }
 }

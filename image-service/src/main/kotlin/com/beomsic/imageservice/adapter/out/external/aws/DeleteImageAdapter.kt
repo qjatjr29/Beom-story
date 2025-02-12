@@ -20,22 +20,10 @@ class DeleteImageAdapter(
 
     override suspend fun deleteImage(imageUrl: String) {
         val key = extractKeyFromUrl(imageUrl)
-        println(key)
         val deleteObjectRequest = DeleteObjectRequest.builder()
             .bucket(awsS3Properties.bucket)
             .key(key)
             .build()
         s3AsyncClient.deleteObject(deleteObjectRequest).await()
-//        try {
-//            val key = extractKeyFromUrl(imageUrl)
-//            val deleteObjectRequest = DeleteObjectRequest.builder()
-//                .bucket(awsS3Properties.bucket)
-//                .key(key)
-//                .build()
-//            s3AsyncClient.deleteObject(deleteObjectRequest).await()
-//        } catch (exception: Exception) {
-//            // 이미지 삭제 실패 처리 (로깅 및 예외 처리)
-////            log.error("이미지 삭제 실패: ${exception.message}")
-//        }
     }
 }

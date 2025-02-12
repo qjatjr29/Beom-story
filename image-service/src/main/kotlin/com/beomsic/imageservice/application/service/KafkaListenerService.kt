@@ -10,5 +10,4 @@ class KafkaListenerService(
     suspend fun deleteImage(imageUrl: String) {
         deleteService.deleteImage(imageUrl)
     }
-
 }

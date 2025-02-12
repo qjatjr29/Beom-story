@@ -52,9 +52,4 @@ class UploadImageAdapter(
 
         return "https://${bucket}.s3.${awsS3Properties.region}.amazonaws.com/$key"
     }
-
-    private fun extractKeyFromUrl(url: String): String {
-        val prefix = "https://${awsS3Properties.bucket}.s3.${awsS3Properties.region}.amazonaws.com/"
-        return url.removePrefix(prefix)
-    }
 }
