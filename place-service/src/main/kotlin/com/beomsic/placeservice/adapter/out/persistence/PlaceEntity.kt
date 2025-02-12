@@ -2,9 +2,12 @@ package com.beomsic.placeservice.adapter.out.persistence
 
 import com.beomsic.placeservice.domain.Category
 import com.beomsic.placeservice.domain.Place
+import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
+import java.time.LocalDateTime
 
 @Table(name = "place")
 data class PlaceEntity(
@@ -19,22 +22,30 @@ data class PlaceEntity(
     val authorId: Long,
 
     @Column
-    val name: String,
+    var name: String,
 
     @Column
-    val description: String?,
+    var description: String?,
 
     @Column
-    val imageUrl: String?,
+    var imageUrl: String?,
 
     @Column
-    val category: Category? = Category.기타,
+    var category: Category? = Category.기타,
 
     @Column
-    val latitude: Double?,
+    var latitude: Double?,
 
     @Column
-    val longitude: Double?,
+    var longitude: Double?,
+
+    @CreatedDate
+    @Column
+    val createdAt: LocalDateTime? = null,
+
+    @LastModifiedDate
+    @Column
+    val updatedAt: LocalDateTime? = null,
 ) {
     fun toDomain(): Place {
         return Place(
@@ -46,7 +57,9 @@ data class PlaceEntity(
             description = description,
             category = category,
             latitude = latitude,
-            longitude = longitude
+            longitude = longitude,
+            createdAt = createdAt!!,
+            updatedAt = updatedAt!!
         )
     }
 }

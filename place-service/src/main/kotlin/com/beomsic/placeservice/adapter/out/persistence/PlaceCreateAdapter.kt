@@ -17,7 +17,7 @@ class PlaceCreateAdapter(
             name = command.name,
             description = command.description,
             imageUrl = command.imageUrl,
-            category = command.category?.let { Category.valueOf(it) },
+            category = command.category?.let { Category.fromString(it) },
             latitude = command.latitude,
             longitude = command.longitude
         )
