@@ -16,7 +16,6 @@ import org.springframework.kafka.support.serializer.JsonDeserializer
 @Configuration
 class KafkaConsumerConfig(
     @Value("\${kafka.bootstrap-servers}") private val bootstrapServers: String,
-    private val kafkaProducerInterceptor: KafkaProducerInterceptor,
 ) {
 
     @Bean

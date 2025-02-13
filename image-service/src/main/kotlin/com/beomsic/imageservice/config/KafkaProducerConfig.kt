@@ -15,7 +15,6 @@ import org.springframework.kafka.support.serializer.JsonSerializer
 @Configuration
 class KafkaProducerConfig(
     @Value("\${kafka.bootstrap-servers}") private val bootstrapServers: String,
-    private val kafkaProducerInterceptor: KafkaProducerInterceptor,
 ) {
 
     @Bean
@@ -39,7 +38,6 @@ class KafkaProducerConfig(
     @Bean
     fun kafkaTemplate(): KafkaTemplate<String, Any> {
         val kafkaTemplate = KafkaTemplate(producerFactory())
-//        kafkaTemplate.setProducerInterceptor(kafkaProducerInterceptor);
         return kafkaTemplate
     }
 }

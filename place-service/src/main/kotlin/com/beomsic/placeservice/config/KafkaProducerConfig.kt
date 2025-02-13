@@ -1,5 +1,7 @@
 package com.beomsic.placeservice.config
 
+import io.asyncer.r2dbc.mysql.client.Client.logger
+import mu.KotlinLogging
 import org.apache.kafka.clients.admin.AdminClientConfig
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
@@ -15,8 +17,9 @@ import org.springframework.kafka.support.serializer.JsonSerializer
 @Configuration
 class KafkaProducerConfig(
     @Value("\${kafka.bootstrap-servers}") private val bootstrapServers: String,
-//    private val kafkaProducerInterceptor: KafkaProducerInterceptor,
 ) {
+
+    private val logger = KotlinLogging.logger {}
 
     @Bean
     fun producerFactory(): ProducerFactory<String, Any> {
@@ -39,7 +42,6 @@ class KafkaProducerConfig(
     @Bean
     fun kafkaTemplate(): KafkaTemplate<String, Any> {
         val kafkaTemplate = KafkaTemplate(producerFactory())
-//        kafkaTemplate.setProducerInterceptor(kafkaProducerInterceptor);
         return kafkaTemplate
     }
 }
@@ -50,6 +52,7 @@ fun <K : Any, V> KafkaTemplate<K, V>.sendMessageWithCallback(topic: String, key:
         .whenComplete { result, ex ->
             if (ex != null) {
                 println("Kafka message delivery failed: ${ex.message}")
+                logger.error(ex.message, ex)
                 // 예외 상황에 대한 재시도 또는 알람 처리
             } else {
                 println("Message delivered to Kafka with offset: ${result.recordMetadata.offset()}")

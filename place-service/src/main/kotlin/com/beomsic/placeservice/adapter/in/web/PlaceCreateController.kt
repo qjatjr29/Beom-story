@@ -24,7 +24,7 @@ class PlaceCreateController(
         @RequestPart request: PlaceCreateRequest,
         @RequestPart(required = false) image: FilePart): ResponseEntity<Place> {
 
-        val command = request.toCreateCommand(authUser.id)
+        val command = request.toCreateCommand(authorId = authUser.id)
         val place = placeCreateUseCase.execute(command, image)
         return ResponseEntity.status(HttpStatus.CREATED).body(place)
     }

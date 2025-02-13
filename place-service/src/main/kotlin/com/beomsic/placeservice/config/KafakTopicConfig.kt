@@ -9,17 +9,17 @@ import org.springframework.kafka.core.KafkaAdmin
 
 @Configuration
 class KafkaTopicConfig(
-    @Value("\${kafka.topic.delete-image}") val deleteImageTopic: String,
+    @Value("\${kafka.topic.rollback-image}") val TOPIC_ROLLBACK_IMAGE: String,
     val kafkaAdmin: KafkaAdmin
 ) {
 
     @PostConstruct
     fun initTopic() {
-        kafkaAdmin.createOrModifyTopics(deleteImageTopic())
+        kafkaAdmin.createOrModifyTopics(rollbackImageTopic())
     }
 
-    private fun deleteImageTopic(): NewTopic =
-        TopicBuilder.name(deleteImageTopic)
+    private fun rollbackImageTopic(): NewTopic =
+        TopicBuilder.name(TOPIC_ROLLBACK_IMAGE)
             .partitions(1)
             .replicas(1)
             .build()

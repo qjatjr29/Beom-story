@@ -7,7 +7,7 @@ class KafkaListenerService(
     private val deleteService: DeleteService,
 ) {
 
-    suspend fun deleteImage(imageUrl: String) {
+    suspend fun rollbackImage(imageUrl: String) {
         deleteService.deleteImage(imageUrl)
     }
 }

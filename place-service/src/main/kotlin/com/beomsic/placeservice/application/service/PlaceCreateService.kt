@@ -1,12 +1,13 @@
 package com.beomsic.placeservice.application.service
 
-import com.beomsic.common.event.ImageDeleteEvent
+import com.beomsic.common.event.ImageRollbackEvent
 import com.beomsic.placeservice.adapter.out.external.service.ImageWebClient
 import com.beomsic.placeservice.application.port.`in`.command.PlaceCreateCommand
 import com.beomsic.placeservice.application.port.`in`.usecase.PlaceCreateUseCase
 import com.beomsic.placeservice.application.port.out.PlaceCreatePort
 import com.beomsic.placeservice.domain.Place
 import com.beomsic.placeservice.domain.exception.ServerException
+import com.beomsic.placeservice.infra.EventPublisher
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 class PlaceCreateService(
     private val placeCreatePort: PlaceCreatePort,
     private val imageWebClient: ImageWebClient,
-    private val placeEventService: PlaceEventService,
+    private val eventPublisher: EventPublisher
 ) : PlaceCreateUseCase {
 
     override suspend fun execute(command: PlaceCreateCommand, image: FilePart?): Place {
@@ -31,7 +32,7 @@ class PlaceCreateService(
             return transactionalCreatePlace(command)
         } catch (ex: Exception) {
             if (uploadedImageUrl != null) {
-                placeEventService.publishDeleteImageEvent(ImageDeleteEvent(uploadedImageUrl))
+                eventPublisher.publishImageEvent(ImageRollbackEvent(uploadedImageUrl))
             }
             throw ServerException(ex.message ?: "Server Exception", ex)
         }
