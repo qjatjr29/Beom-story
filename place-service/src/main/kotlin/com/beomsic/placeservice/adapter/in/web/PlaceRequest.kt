@@ -8,3 +8,11 @@ data class PlaceCreateRequest(
     val latitude: Double?,
     val longitude: Double?,
 )
+
+data class PlaceUpdateContentRequest(
+    val name: String?,
+    val description: String?,
+    val category: String?,
+    val latitude: Double?,
+    val longitude: Double?,
+)
