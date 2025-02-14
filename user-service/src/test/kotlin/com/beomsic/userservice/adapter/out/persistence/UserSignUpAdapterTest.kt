@@ -34,13 +34,13 @@ class UserSignUpAdapterTest {
         val command = UserSignUpCommand(
             email = "user@example.com",
             password = "password",
-            username = "user"
+            nickname = "user"
         )
 
         val userEntity = UserEntity(
             email = command.email,
             password = BCryptUtils.hash(command.password),
-            username = command.username
+            nickname = command.nickname
         )
 
         coEvery { userRepository.save(any()) } returns userEntity

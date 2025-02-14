@@ -19,7 +19,7 @@ class UserSignUpController (
         val command = UserSignUpCommand(
             request.email,
             request.password,
-            request.username
+            request.nickname
         )
 
         userSignUpUseCase.execute(command)

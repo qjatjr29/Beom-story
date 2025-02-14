@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 data class UserDetailResponse (
     val id: Long,
     val email: String,
-    val username: String,
+    val nickname: String,
     val profileUrl : String?,
     val createdAt : LocalDateTime?,
     val updatedAt : LocalDateTime?,
@@ -16,7 +16,7 @@ data class UserDetailResponse (
             UserDetailResponse(
                 id = id!!,
                 profileUrl = if (profileUrl.isNullOrEmpty()) null else "",
-                username = username,
+                nickname = nickname,
                 email = email,
                 createdAt = createdAt,
                 updatedAt = updatedAt
@@ -28,6 +28,6 @@ data class UserDetailResponse (
 data class UserLoginResponse (
     val id: Long,
     val email: String,
-    val username: String,
+    val nickname: String,
     val accessToken: String,
 )

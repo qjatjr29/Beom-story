@@ -59,7 +59,7 @@ class UserFindControllerTest {
         val user = User(
             id = userId,
             email = "test@example.com",
-            username = "testUser"
+            nickname = "testUser"
         )
         coEvery { userFindUseCase.findById(userId) } returns user
 

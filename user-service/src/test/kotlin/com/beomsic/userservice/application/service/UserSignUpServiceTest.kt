@@ -45,7 +45,7 @@ class UserSignUpServiceTest {
         val command = UserSignUpCommand(
             email = "user@example.com",
             password = "password12@",
-            username = "user"
+            nickname = "user"
         )
 
         // when
@@ -67,13 +67,13 @@ class UserSignUpServiceTest {
         val command = UserSignUpCommand(
             email = "user@example.com",
             password = "password12@",
-            username = "user"
+            nickname = "user"
         )
 
         val existingUser = UserEntity(
             email = command.email,
             password = command.password,
-            username = command.username
+            nickname = command.nickname
         )
 
         // when
@@ -91,7 +91,7 @@ class UserSignUpServiceTest {
         val command = UserSignUpCommand(
             email = "invalid-email",
             password = "password12!",
-            username = "user"
+            nickname = "user"
         )
 
         // when
@@ -113,7 +113,7 @@ class UserSignUpServiceTest {
         val command = UserSignUpCommand(
             email = "user@example.com",
             password = "invalidpass",
-            username = "user"
+            nickname = "user"
         )
 
         // when

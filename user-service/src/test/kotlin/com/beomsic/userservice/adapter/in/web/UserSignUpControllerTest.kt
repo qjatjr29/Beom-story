@@ -52,7 +52,7 @@ class UserSignUpControllerTest {
         val request = SignUpRequest(
             email = "user@example.com",
             password = "password12!",
-            username = "user"
+            nickname = "user"
         )
 
         coEvery { userSignUpUseCase.execute(any()) } just Runs
@@ -67,7 +67,7 @@ class UserSignUpControllerTest {
 
         // then
         coVerify { userSignUpUseCase.execute(
-            match { it.email == "user@example.com" && it.username == "user" }
+            match { it.email == "user@example.com" && it.nickname == "user" }
         )}
     }
 
@@ -77,7 +77,7 @@ class UserSignUpControllerTest {
         val request = SignUpRequest(
             email = "user@examplecom",
             password = "password12!",
-            username = "user"
+            nickname = "user"
         )
 
         coEvery { userSignUpUseCase.execute(any()) } throws InvalidEmailException()
@@ -100,7 +100,7 @@ class UserSignUpControllerTest {
         val request = SignUpRequest(
             email = "user@example.com",
             password = "password12",
-            username = "user"
+            nickname = "user"
         )
 
         coEvery { userSignUpUseCase.execute(any()) } throws InvalidPasswordException()

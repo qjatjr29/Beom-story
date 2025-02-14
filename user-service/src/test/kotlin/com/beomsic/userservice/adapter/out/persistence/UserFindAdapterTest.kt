@@ -39,7 +39,7 @@ class UserFindAdapterTest {
             id = userId,
             email = "test@example.com",
             password = "password12!",
-            username = "testUser"
+            nickname = "testUser"
         )
         coEvery { userRepository.findByIdOrNull(userId) } returns userEntity
 
@@ -49,7 +49,7 @@ class UserFindAdapterTest {
         // then
         assertEquals(userId, result.id)
         assertEquals("test@example.com", result.email)
-        assertEquals("testUser", result.username)
+        assertEquals("testUser", result.nickname)
         coVerify { userRepository.findByIdOrNull(userId) }
     }
 

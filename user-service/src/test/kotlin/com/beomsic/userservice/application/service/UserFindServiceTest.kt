@@ -42,7 +42,7 @@ class UserFindServiceTest {
             id = userId,
             email = "test@example.com",
             password = "password12!",
-            username = "testUser",
+            nickname = "testUser",
             createdAt = LocalDateTime.of(2025, 1, 1, 12, 30),
             updatedAt = LocalDateTime.of(2025, 1, 1, 12, 30)
         )
@@ -54,7 +54,7 @@ class UserFindServiceTest {
         // then
         assertEquals(userId, result.id)
         assertEquals("test@example.com", result.email)
-        assertEquals("testUser", result.username)
+        assertEquals("testUser", result.nickname)
         coVerify { userFindPort.findById(userId) }
     }
 

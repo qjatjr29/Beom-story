@@ -28,7 +28,7 @@ class UserLoginService(
         return UserLoginResponse(
             id = user.id,
             email = user.email,
-            username = user.username,
+            nickname = user.nickname,
             accessToken = accessToken,
         )
     }

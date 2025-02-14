@@ -21,7 +21,7 @@ data class UserEntity (
     val password: String,
 
     @Column
-    val username: String,
+    val nickname: String,
 
     @Column
     val profileUrl: String? = null,
@@ -37,7 +37,7 @@ data class UserEntity (
     fun toDomain() = User(
         id = id,
         email = email,
-        username = username,
+        nickname = nickname,
         profileUrl = profileUrl,
         createdAt = createdAt!!,
         updatedAt = updatedAt!!

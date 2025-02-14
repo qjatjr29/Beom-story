@@ -14,7 +14,7 @@ class UserSignUpAdapter(
         val userEntity = UserEntity(
             email = command.email,
             password = BCryptUtils.hash(command.password),
-            username = command.username)
+            nickname = command.nickname)
 
         userRepository.save(userEntity)
     }
