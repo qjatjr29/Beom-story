@@ -37,7 +37,7 @@ class AuthTokenResolver : HandlerMethodArgumentResolver {
 
         // 값이 없으면 예외 처리
         checkNotNull(userId) { "userId header is missing" }
-        checkNotNull(email) { "username header is missing" }
+        checkNotNull(email) { "email header is missing" }
 
         return Mono.just(
             AuthUser(

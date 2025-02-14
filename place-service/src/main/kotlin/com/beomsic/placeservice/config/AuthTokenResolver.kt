@@ -28,7 +28,7 @@ class AuthTokenResolver : HandlerMethodArgumentResolver {
         val email = exchange.request.headers["email"]?.firstOrNull()
 
         checkNotNull(userId) { "userId header is missing" }
-        checkNotNull(email) { "username header is missing" }
+        checkNotNull(email) { "email header is missing" }
 
         return Mono.just(
             AuthUser(
