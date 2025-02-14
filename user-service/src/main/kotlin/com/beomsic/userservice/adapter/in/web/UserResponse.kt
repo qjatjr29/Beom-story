@@ -31,3 +31,7 @@ data class UserLoginResponse (
     val nickname: String,
     val accessToken: String,
 )
+
+data class CheckDuplicateResponse (
+    val isDuplicated: Boolean
+)
