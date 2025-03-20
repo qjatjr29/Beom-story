@@ -1,4 +1,4 @@
-package com.beomsic.storyservice.config
+package com.beomsic.storyservice.infrastructure.config
 
 import com.beomsic.common.annotation.AuthToken
 import com.beomsic.common.model.AuthUser
