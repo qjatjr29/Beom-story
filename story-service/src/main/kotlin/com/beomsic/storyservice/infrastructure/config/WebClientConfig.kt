@@ -1,4 +1,4 @@
-package com.beomsic.storyservice.config
+package com.beomsic.storyservice.infrastructure.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
