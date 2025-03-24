@@ -1,4 +1,4 @@
-package com.beomsic.userservice.domain
+package com.beomsic.userservice.domain.model
 
 import java.time.LocalDateTime
 
