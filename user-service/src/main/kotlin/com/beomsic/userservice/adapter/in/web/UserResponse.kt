@@ -1,6 +1,6 @@
 package com.beomsic.userservice.adapter.`in`.web
 
-import com.beomsic.userservice.domain.User
+import com.beomsic.userservice.domain.model.User
 import java.time.LocalDateTime
 
 data class UserDetailResponse (

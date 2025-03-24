@@ -2,7 +2,9 @@ package com.beomsic.userservice.adapter.out.persistence
 
 import com.beomsic.userservice.application.port.`in`.command.UserSignUpCommand
 import com.beomsic.userservice.application.port.out.UserSignUpPort
-import com.beomsic.userservice.domain.util.BCryptUtils
+import com.beomsic.userservice.infrastructure.persistence.UserEntity
+import com.beomsic.userservice.infrastructure.persistence.UserRepository
+import com.beomsic.userservice.infrastructure.util.BCryptUtils
 import org.springframework.stereotype.Component
 
 @Component

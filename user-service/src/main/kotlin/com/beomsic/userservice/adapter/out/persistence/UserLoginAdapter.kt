@@ -1,8 +1,7 @@
 package com.beomsic.userservice.adapter.out.persistence
 
-import com.beomsic.userservice.adapter.out.jwt.JwtTokenProvider
 import com.beomsic.userservice.application.port.out.UserLoginPort
-import com.beomsic.userservice.domain.model.Token
+import com.beomsic.userservice.infrastructure.jwt.JwtTokenProvider
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
@@ -54,6 +53,7 @@ class UserLoginAdapter(
         return token.accessToken
     }
 
+    // todo: Auth
     override suspend fun logout(userId: Long, accessToken: String) {
         val expiration = jwtTokenProvider.getAccessTokenExpiresTime()
         redisTemplate.opsForValue()

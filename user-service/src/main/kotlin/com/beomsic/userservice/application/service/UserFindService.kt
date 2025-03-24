@@ -2,7 +2,7 @@ package com.beomsic.userservice.application.service
 
 import com.beomsic.userservice.application.port.`in`.usecase.UserFindUseCase
 import com.beomsic.userservice.application.port.out.UserFindPort
-import com.beomsic.userservice.domain.User
+import com.beomsic.userservice.domain.model.User
 import org.springframework.stereotype.Service
 
 @Service

@@ -7,7 +7,7 @@ import com.beomsic.userservice.application.port.out.UserFindPort
 import com.beomsic.userservice.application.port.out.UserLoginPort
 import com.beomsic.userservice.domain.exception.PasswordNotMatchedException
 import com.beomsic.userservice.domain.exception.UserNotFoundException
-import com.beomsic.userservice.domain.util.BCryptUtils
+import com.beomsic.userservice.infrastructure.util.BCryptUtils
 import org.springframework.stereotype.Service
 
 @Service

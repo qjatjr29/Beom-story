@@ -1,6 +1,6 @@
 package com.beomsic.userservice.infrastructure.persistence
 
-import com.beomsic.userservice.domain.User
+import com.beomsic.userservice.domain.model.User
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate

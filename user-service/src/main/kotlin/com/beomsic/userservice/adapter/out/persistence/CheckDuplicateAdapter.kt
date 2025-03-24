@@ -1,6 +1,7 @@
 package com.beomsic.userservice.adapter.out.persistence
 
 import com.beomsic.userservice.application.port.out.CheckDuplicatePort
+import com.beomsic.userservice.infrastructure.persistence.UserRepository
 import org.springframework.stereotype.Component
 
 @Component
