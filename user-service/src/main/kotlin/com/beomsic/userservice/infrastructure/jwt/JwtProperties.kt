@@ -1,4 +1,4 @@
-package com.beomsic.userservice.adapter.out.jwt
+package com.beomsic.userservice.infrastructure.jwt
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

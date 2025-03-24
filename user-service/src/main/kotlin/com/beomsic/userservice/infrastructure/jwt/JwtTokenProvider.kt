@@ -1,4 +1,4 @@
-package com.beomsic.userservice.adapter.out.jwt
+package com.beomsic.userservice.infrastructure.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

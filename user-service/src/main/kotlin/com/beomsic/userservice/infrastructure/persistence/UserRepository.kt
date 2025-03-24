@@ -1,4 +1,4 @@
-package com.beomsic.userservice.adapter.out.persistence
+package com.beomsic.userservice.infrastructure.persistence
 
 import com.beomsic.userservice.domain.exception.UserNotFoundException
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository

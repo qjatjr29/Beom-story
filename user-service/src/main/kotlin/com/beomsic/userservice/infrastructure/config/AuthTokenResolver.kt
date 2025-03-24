@@ -1,4 +1,4 @@
-package com.beomsic.userservice.config
+package com.beomsic.userservice.infrastructure.config
 
 import com.beomsic.common.annotation.AuthToken
 import com.beomsic.common.model.AuthUser
