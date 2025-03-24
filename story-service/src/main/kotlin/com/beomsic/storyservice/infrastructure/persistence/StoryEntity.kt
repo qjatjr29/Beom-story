@@ -1,7 +1,7 @@
 package com.beomsic.storyservice.infrastructure.persistence
 
-import com.beomsic.storyservice.domain.Category
-import com.beomsic.storyservice.domain.Story
+import com.beomsic.storyservice.domain.model.Category
+import com.beomsic.storyservice.domain.model.Story
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate

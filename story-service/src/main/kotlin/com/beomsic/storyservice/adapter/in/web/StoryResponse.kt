@@ -7,6 +7,7 @@ data class StoryDetailResponse(
     val authorId: Long,
     val title: String,
     val description: String?,
+    val category: String,
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,
     val createdAt: LocalDateTime,
