@@ -5,5 +5,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "kafka.topic")
 data class KafkaTopicProperties(
-    var storyDeleted: String
+    var storyOutbox: String
 )

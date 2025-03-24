@@ -1,6 +1,5 @@
 package com.beomsic.storyservice.infrastructure.persistence
 
-import com.beomsic.storyservice.domain.outbox.StoryOutboxPayload
 import com.beomsic.storyservice.domain.outbox.StoryOutboxType
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
@@ -23,7 +22,7 @@ class StoryOutbox(
     val outboxType: StoryOutboxType,
 
     @Column(nullable = false)
-    val payload: StoryOutboxPayload,
+    val payload: String,
 
     @CreatedDate
     @Column(updatable = false)

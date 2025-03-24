@@ -14,7 +14,7 @@ class KafkaTopicConfig(private val topicProperties: KafkaTopicProperties) {
     @Bean
     fun topics(): List<NewTopic> {
         return listOf(
-            createTopic(topicProperties.storyDeleted)
+            createTopic(topicProperties.storyOutbox)
         )
     }
 

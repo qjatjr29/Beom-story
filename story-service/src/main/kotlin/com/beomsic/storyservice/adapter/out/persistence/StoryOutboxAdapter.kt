@@ -15,14 +15,15 @@ class StoryOutboxAdapter(
 ): StoryOutboxPort {
 
     override fun saveOutboxMessage(storyId: Long) {
-        val payload = StoryDeletedOutboxPayload(storyId)
-        val serializedPayload = Json.encodeToString(payload)
+
         val outboxType = StoryOutboxType.STORY_DELETED
+        val payload = StoryDeletedOutboxPayload(outboxType, storyId)
+        val serializedPayload = Json.encodeToString(payload)
 
         val outbox = StoryOutbox(
             storyId = storyId,
-//            payload = serializedPayload,
-            payload = payload,
+            payload = serializedPayload,
+//            payload = payload,
             outboxType = outboxType,
         )
 
