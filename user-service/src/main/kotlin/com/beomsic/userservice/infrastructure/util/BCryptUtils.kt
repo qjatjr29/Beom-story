@@ -1,4 +1,4 @@
-package com.beomsic.userservice.domain.util
+package com.beomsic.userservice.infrastructure.util
 
 import at.favre.lib.crypto.bcrypt.BCrypt
 
