@@ -1,5 +1,6 @@
 package com.beomsic.userservice.adapter.`in`.web
 
+import com.beomsic.userservice.adapter.`in`.web.dto.CheckDuplicateResponse
 import com.beomsic.userservice.application.port.`in`.usecase.CheckDuplicateUseCase
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

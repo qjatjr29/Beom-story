@@ -1,5 +1,6 @@
 package com.beomsic.userservice.adapter.`in`.web
 
+import com.beomsic.userservice.adapter.`in`.web.dto.SignUpRequest
 import com.beomsic.userservice.application.port.`in`.command.UserSignUpCommand
 import com.beomsic.userservice.application.port.`in`.usecase.UserSignUpUseCase
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,11 +17,7 @@ class UserSignUpController (
     @PostMapping("/signup")
     suspend fun signup(@RequestBody request: SignUpRequest) {
 
-        val command = UserSignUpCommand(
-            request.email,
-            request.password,
-            request.nickname
-        )
+        val command = UserSignUpCommand(request.email, request.password, request.nickname)
 
         userSignUpUseCase.execute(command)
     }

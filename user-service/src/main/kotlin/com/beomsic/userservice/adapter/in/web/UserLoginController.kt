@@ -2,6 +2,8 @@ package com.beomsic.userservice.adapter.`in`.web
 
 import com.beomsic.common.annotation.AuthToken
 import com.beomsic.common.model.AuthUser
+import com.beomsic.userservice.adapter.`in`.web.dto.LoginRequest
+import com.beomsic.userservice.adapter.`in`.web.dto.UserLoginResponse
 import com.beomsic.userservice.application.port.`in`.command.UserLoginCommand
 import com.beomsic.userservice.application.port.`in`.usecase.UserLoginUseCase
 import org.springframework.data.redis.core.RedisTemplate
