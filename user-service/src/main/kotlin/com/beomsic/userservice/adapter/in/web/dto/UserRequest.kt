@@ -1,4 +1,4 @@
-package com.beomsic.userservice.adapter.`in`.web
+package com.beomsic.userservice.adapter.`in`.web.dto
 
 data class SignUpRequest (
     val email: String,

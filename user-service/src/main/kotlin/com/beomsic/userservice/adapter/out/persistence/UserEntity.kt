@@ -1,4 +1,4 @@
-package com.beomsic.userservice.infrastructure.persistence
+package com.beomsic.userservice.adapter.out.persistence
 
 import com.beomsic.userservice.domain.model.User
 import org.springframework.data.annotation.CreatedDate
@@ -18,13 +18,19 @@ data class UserEntity (
     val email: String,
 
     @Column
-    val password: String,
+    val password: String? = null,
 
     @Column
     val nickname: String,
 
     @Column
     val profileUrl: String? = null,
+
+    @Column
+    val provider: String? = null,
+
+    @Column
+    val providerId: String? = null,
 
     @CreatedDate
     @Column

@@ -1,9 +1,10 @@
-package com.beomsic.userservice.infrastructure.jwt
+package com.beomsic.userservice.application.service.auth
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.beomsic.userservice.domain.model.Token
+import com.beomsic.userservice.infrastructure.jwt.JwtProperties
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.util.*

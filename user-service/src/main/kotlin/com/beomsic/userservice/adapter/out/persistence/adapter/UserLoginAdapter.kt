@@ -1,7 +1,7 @@
-package com.beomsic.userservice.adapter.out.persistence
+package com.beomsic.userservice.adapter.out.persistence.adapter
 
 import com.beomsic.userservice.application.port.out.UserLoginPort
-import com.beomsic.userservice.infrastructure.jwt.JwtTokenProvider
+import com.beomsic.userservice.application.service.auth.JwtTokenProvider
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit

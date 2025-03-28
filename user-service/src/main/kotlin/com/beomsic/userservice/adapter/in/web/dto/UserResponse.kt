@@ -1,4 +1,4 @@
-package com.beomsic.userservice.adapter.`in`.web
+package com.beomsic.userservice.adapter.`in`.web.dto
 
 import com.beomsic.userservice.domain.model.User
 import java.time.LocalDateTime
