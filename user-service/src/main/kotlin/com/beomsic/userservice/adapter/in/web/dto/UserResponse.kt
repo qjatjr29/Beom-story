@@ -29,7 +29,7 @@ data class UserLoginResponse (
     val id: Long,
     val email: String,
     val nickname: String,
-    val accessToken: String,
+    val accessToken: String?,
 )
 
 data class CheckDuplicateResponse (

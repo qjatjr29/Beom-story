@@ -4,6 +4,7 @@ import com.beomsic.userservice.application.port.`in`.command.UserLoginCommand
 import com.beomsic.userservice.application.port.`in`.usecase.UserLoginUseCase
 import com.beomsic.userservice.application.port.out.UserFindPort
 import com.beomsic.userservice.application.port.out.UserLoginPort
+import com.beomsic.userservice.application.service.dto.UserDto
 import com.beomsic.userservice.domain.exception.PasswordNotMatchedException
 import com.beomsic.userservice.domain.exception.UserNotFoundException
 import com.beomsic.userservice.infrastructure.util.BCryptUtils
@@ -15,21 +16,15 @@ class UserLoginService(
     private val userLoginPort: UserLoginPort
 ): UserLoginUseCase {
 
-    override suspend fun login(command: UserLoginCommand): String {
+    override suspend fun login(command: UserLoginCommand): UserDto {
         val user = userFindPort.findByEmail(command.email) ?: throw UserNotFoundException()
 
         if (!BCryptUtils.verify(command.password, user.password!!)) {
             throw PasswordNotMatchedException()
         }
 
-        return userLoginPort.login(userId = user.id!!, email = user.email)
-
-//        return UserLoginResponse(
-//            id = user.id,
-//            email = user.email,
-//            nickname = user.nickname,
-//            accessToken = accessToken,
-//        )
+        val accessToken = userLoginPort.login(userId = user.id!!, email = user.email)
+        return UserDto(user.id, user.email, user.nickname, accessToken)
     }
 
     override suspend fun reissueToken(refreshToken: String): String {

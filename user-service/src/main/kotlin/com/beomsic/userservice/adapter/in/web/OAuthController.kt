@@ -1,5 +1,6 @@
 package com.beomsic.userservice.adapter.`in`.web
 
+import com.beomsic.userservice.adapter.`in`.web.dto.UserLoginResponse
 import com.beomsic.userservice.application.port.`in`.usecase.OAuthUserCase
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -21,9 +22,13 @@ class OAuthController(
     }
 
     @GetMapping("/login/oauth2/code/{provider}")
-    suspend fun callback(@PathVariable provider: String, @RequestParam code: String): ResponseEntity<String> {
-        val userInfo = oauthUserCase.login(provider, code)
-        return ResponseEntity.ok().body(userInfo)
+    suspend fun callback(@PathVariable provider: String, @RequestParam code: String): ResponseEntity<UserLoginResponse> {
+        val userDto = oauthUserCase.login(provider, code)
+        return ResponseEntity.ok().body(UserLoginResponse(
+            id = userDto.id,
+            email = userDto.email,
+            nickname = userDto.nickname,
+            accessToken = userDto.accessToken))
     }
 
 }
