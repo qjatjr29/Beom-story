@@ -16,7 +16,7 @@ class CheckDuplicateController(
 
     @PostMapping("/duplicate")
     suspend fun checkDuplicate(@RequestParam type: String,
-                                    @RequestParam value: String): ResponseEntity<CheckDuplicateResponse> {
+                               @RequestParam value: String): ResponseEntity<CheckDuplicateResponse> {
         val result = checkDuplicateUseCase.execute(type = type, value = value)
 
         return ResponseEntity.ok(CheckDuplicateResponse(result))
