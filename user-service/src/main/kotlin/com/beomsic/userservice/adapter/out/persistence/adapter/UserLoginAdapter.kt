@@ -53,7 +53,6 @@ class UserLoginAdapter(
         return token.accessToken
     }
 
-    // todo: Auth
     override suspend fun logout(userId: Long, accessToken: String) {
         val expiration = jwtTokenProvider.getAccessTokenExpiresTime()
         redisTemplate.opsForValue()

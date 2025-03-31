@@ -41,9 +41,10 @@ data class UserEntity (
     val updatedAt: LocalDateTime? = null,
 ) {
     fun toDomain() = User(
-        id = id,
+        id = id ?: throw RuntimeException("Failed to convert entity to domain"),
         email = email,
         nickname = nickname,
+        password = password,
         profileUrl = profileUrl,
         createdAt = createdAt!!,
         updatedAt = updatedAt!!

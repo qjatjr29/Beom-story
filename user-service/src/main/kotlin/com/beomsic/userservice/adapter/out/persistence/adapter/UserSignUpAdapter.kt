@@ -4,6 +4,8 @@ import com.beomsic.userservice.adapter.out.persistence.UserEntity
 import com.beomsic.userservice.adapter.out.persistence.UserRepository
 import com.beomsic.userservice.application.port.`in`.command.UserSignUpCommand
 import com.beomsic.userservice.application.port.out.UserSignUpPort
+import com.beomsic.userservice.domain.exception.UserEmailAlreadyException
+import com.beomsic.userservice.domain.model.User
 import com.beomsic.userservice.domain.oauth.OAuthUserInfo
 import com.beomsic.userservice.infrastructure.util.BCryptUtils
 import org.springframework.stereotype.Component
@@ -13,16 +15,23 @@ class UserSignUpAdapter(
     private val userRepository: UserRepository,
 ) : UserSignUpPort {
 
-    override suspend fun signup(command: UserSignUpCommand): UserEntity {
+    override suspend fun signup(command: UserSignUpCommand): User {
+
+        if (userRepository.existsByEmail(command.email)) throw UserEmailAlreadyException()
+
         val userEntity = UserEntity(
             email = command.email,
             password = BCryptUtils.hash(command.password),
             nickname = command.nickname)
 
-        return userRepository.save(userEntity)
+        val user = userRepository.save(userEntity)
+        return user.toDomain()
     }
 
-    override suspend fun oauthSignup(userInfo: OAuthUserInfo): UserEntity {
+    override suspend fun oauthSignup(userInfo: OAuthUserInfo): User {
+
+        if (userRepository.existsByEmail(userInfo.email)) throw UserEmailAlreadyException()
+
         val userEntity = UserEntity(
             email = userInfo.email,
             nickname = userInfo.name,
@@ -30,6 +39,7 @@ class UserSignUpAdapter(
             providerId = userInfo.providerId,
             profileUrl = userInfo.profileImage
         )
-        return userRepository.save(userEntity)
+        val user = userRepository.save(userEntity)
+        return user.toDomain()
     }
 }

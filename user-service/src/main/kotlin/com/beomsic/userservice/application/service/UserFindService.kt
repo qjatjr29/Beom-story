@@ -11,7 +11,6 @@ class UserFindService (
 ) : UserFindUseCase {
 
     override suspend fun findById(id: Long): User {
-        val userEntity = userFindPort.findById(id)
-        return userEntity.toDomain()
+        return userFindPort.findById(id)
     }
 }

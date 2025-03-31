@@ -13,3 +13,7 @@ interface UserRepository : CoroutineCrudRepository<UserEntity, Long> {
 suspend fun UserRepository.findByIdOrNull(id: Long): UserEntity {
     return findById(id) ?: throw UserNotFoundException()
 }
+
+suspend fun UserRepository.findByEmailOrNull(email: String): UserEntity {
+    return findByEmail(email) ?: throw UserNotFoundException()
+}

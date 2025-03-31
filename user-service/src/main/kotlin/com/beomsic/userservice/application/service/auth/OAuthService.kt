@@ -29,8 +29,7 @@ class OAuthService(
         val user = userFindPort.findByProviderAndProviderId(provider, userInfo.providerId)
             ?: userSignUpPort.oauthSignup(userInfo)
 
-        val accessToken = user.id?.let { userId -> userLoginPort.login(userId, user.email) }
-            ?: throw IllegalStateException("Unable to login user: Missing user ID")
+        val accessToken = userLoginPort.login(user.id, user.email)
 
         return UserDto(user.id, user.email, user.nickname, accessToken)
     }
