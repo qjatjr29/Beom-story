@@ -11,3 +11,11 @@ data class LoginRequest (
     val email: String,
     val password: String,
 )
+
+data class UserNicknameUpdateRequest (
+    val nickname: String,
+)
+
+data class UserPasswordUpdateRequest (
+    val password: String,
+)

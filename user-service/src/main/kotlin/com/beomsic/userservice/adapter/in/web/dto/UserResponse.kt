@@ -14,7 +14,7 @@ data class UserDetailResponse (
     companion object {
         operator fun invoke(user: User) = with(user) {
             UserDetailResponse(
-                id = id!!,
+                id = id,
                 profileUrl = if (profileUrl.isNullOrEmpty()) null else "",
                 nickname = nickname,
                 email = email,
