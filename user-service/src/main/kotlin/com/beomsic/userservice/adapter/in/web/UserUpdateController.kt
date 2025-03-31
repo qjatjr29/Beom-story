@@ -16,19 +16,21 @@ class UserUpdateController(
     private val userUpdateUseCase: UserUpdateUseCase,
 ) {
 
-    @PatchMapping("/nickname")
+    @PatchMapping("/{userId}/nickname")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     suspend fun updateUserNickname(@AuthToken authUser: AuthUser,
+                                   @PathVariable userId: Long,
                                    @RequestBody request: UserNicknameUpdateRequest) {
-        val command = UserNicknameUpdateCommand(authUser.id, request.nickname)
+        val command = UserNicknameUpdateCommand(userId, authUser.id, request.nickname)
         userUpdateUseCase.updateUserNickname(command)
     }
 
-    @PatchMapping("/password")
+    @PatchMapping("/{userId}/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     suspend fun updateUserPassword(@AuthToken authUser: AuthUser,
+                                   @PathVariable userId: Long,
                                    @RequestBody request: UserPasswordUpdateRequest) {
-        val command = UserPasswordUpdateCommand(authUser.id, request.password)
+        val command = UserPasswordUpdateCommand(userId, authUser.id, request.password)
         userUpdateUseCase.updateUserPassword(command)
     }
 

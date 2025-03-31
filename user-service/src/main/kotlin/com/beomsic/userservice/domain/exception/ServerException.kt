@@ -36,3 +36,7 @@ data class InvalidEmailException(
 data class InvalidPasswordException(
     override val message: String = "잘못된 password 형식입니다."
 ) : ServerException(400, message)
+
+data class AuthenticationException(
+    override val message: String = "권한이 없습니다."
+) : ServerException(403, message)
