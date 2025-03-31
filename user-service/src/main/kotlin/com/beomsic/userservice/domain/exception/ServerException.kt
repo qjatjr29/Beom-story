@@ -9,6 +9,10 @@ data class UserExistsException(
     override val message: String = "이미 존재하는 유저입니다."
 ) : ServerException(409, message)
 
+data class UserEmailAlreadyException(
+    override val message: String = "같은 이메일로 회원가입한 유저가 존재합니다."
+) : ServerException(409, message)
+
 data class UserNotFoundException(
     override val message: String = "유저가 존재하지 않습니다."
 ) : ServerException(404, message)
