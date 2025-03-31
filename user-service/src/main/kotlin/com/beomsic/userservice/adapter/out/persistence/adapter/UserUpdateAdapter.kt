@@ -13,16 +13,20 @@ class UserUpdateAdapter(
     private val userRepository: UserRepository
 ): UserUpdatePort {
 
-    override suspend fun updateNickname(id: Long, newNickname: String): User {
-        return updateUser(id) { userEntity ->
+    override suspend fun updateNickname(id: Long, newNickname: String) {
+        updateUser(id) { userEntity ->
             userRepository.save(userEntity.copy(nickname = newNickname)).toDomain()
         }
     }
 
-    override suspend fun updatePassword(id: Long, newPassword: String): User {
-        return updateUser(id) { userEntity ->
+    override suspend fun updatePassword(id: Long, newPassword: String) {
+        updateUser(id) { userEntity ->
             userRepository.save(userEntity.copy(password = BCryptUtils.hash(newPassword))).toDomain()
         }
+    }
+
+    override suspend fun deleteUser(id: Long) {
+        userRepository.deleteById(id)
     }
 
     private suspend fun updateUser(id: Long, updateAction: suspend (UserEntity) -> User): User {

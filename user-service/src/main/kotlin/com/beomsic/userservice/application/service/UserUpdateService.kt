@@ -26,4 +26,11 @@ class UserUpdateService(
         validationService.validatePassword(command.password)
         userUpdatePort.updatePassword(command.userId, command.password)
     }
+
+    @Transactional
+    override suspend fun deleteUser(userId: Long, authUserId: Long) {
+        if (userId != authUserId) throw AuthenticationException()
+        userUpdatePort.deleteUser(userId)
+        // todo: user 관련된 story 삭제 => 트랜잭션 아웃박스 패턴 이용
+    }
 }
