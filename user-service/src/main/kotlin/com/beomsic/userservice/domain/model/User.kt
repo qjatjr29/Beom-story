@@ -8,6 +8,6 @@ data class User (
     val nickname: String,
     val password: String? = null,
     val profileUrl: String? = null,
-    val createdAt: LocalDateTime? = null,
-    val updatedAt: LocalDateTime? = null,
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime,
 )

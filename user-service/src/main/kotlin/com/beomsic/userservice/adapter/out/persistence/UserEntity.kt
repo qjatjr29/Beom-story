@@ -46,7 +46,7 @@ data class UserEntity (
         nickname = nickname,
         password = password,
         profileUrl = profileUrl,
-        createdAt = createdAt!!,
-        updatedAt = updatedAt!!
+        createdAt = createdAt ?: throw RuntimeException("Failed to convert entity to domain"),
+        updatedAt = updatedAt ?: throw RuntimeException("Failed to convert entity to domain")
     )
 }
