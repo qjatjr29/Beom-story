@@ -1,7 +1,7 @@
 package com.beomsic.userservice.application.port.`in`.usecase
 
-import com.beomsic.userservice.domain.model.User
+import com.beomsic.userservice.application.service.dto.UserDto
 
 interface UserFindUseCase {
-    suspend fun findById(id: Long): User
+    suspend fun findById(id: Long): UserDto
 }
