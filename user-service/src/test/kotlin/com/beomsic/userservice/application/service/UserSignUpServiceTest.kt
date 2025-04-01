@@ -1,13 +1,15 @@
 package com.beomsic.userservice.application.service
 
-import com.beomsic.userservice.adapter.out.persistence.UserEntity
 import com.beomsic.userservice.application.port.`in`.command.UserSignUpCommand
-import com.beomsic.userservice.application.port.out.UserFindPort
 import com.beomsic.userservice.application.port.out.UserSignUpPort
+import com.beomsic.userservice.application.service.auth.UserSignUpService
 import com.beomsic.userservice.domain.exception.InvalidEmailException
 import com.beomsic.userservice.domain.exception.InvalidPasswordException
-import com.beomsic.userservice.domain.exception.UserExistsException
+import com.beomsic.userservice.domain.exception.UserEmailAlreadyException
+import com.beomsic.userservice.domain.model.AuthType
+import com.beomsic.userservice.domain.model.User
 import io.mockk.*
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.test.runTest
@@ -15,14 +17,12 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
-
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
+import java.time.LocalDateTime
 
 @ExtendWith(MockKExtension::class)
 class UserSignUpServiceTest {
-
-    @MockK
-    private lateinit var userFindPort: UserFindPort
 
     @MockK
     private lateinit var userSignUpPort: UserSignUpPort
@@ -30,17 +30,37 @@ class UserSignUpServiceTest {
     @MockK
     private lateinit var validationService: ValidationService
 
-    @Autowired
+    @InjectMockKs
     private lateinit var userSignUpService: UserSignUpService
 
     @BeforeEach
     fun setUp() {
-        clearMocks(userFindPort, userSignUpPort) // 테스트마다 Mock 초기화
-        userSignUpService = UserSignUpService(userFindPort, userSignUpPort, validationService)
+        clearMocks(userSignUpPort) // 테스트마다 Mock 초기화
+    }
+
+    companion object {
+        @JvmStatic
+        fun invalidEmails() = listOf(
+            "plainaddress",
+            "username.com",
+            "@missingusername.com",
+            "username@.com.my",
+            "username@com",
+            "username@domain..com"
+        )
+
+        @JvmStatic
+        fun invalidPasswords() = listOf(
+            "short1!",
+            "alllowercase!",
+            "ALLUPPERCASE1",
+            "12345678!",
+            "noSpecialChar123"
+        )
     }
 
     @Test
-    fun `사용자 회원가입 테스트`() = runTest {
+    fun `사용자 회원가입 정상 동작 테스트`() = runTest {
         // given
         val command = UserSignUpCommand(
             email = "user@example.com",
@@ -48,48 +68,55 @@ class UserSignUpServiceTest {
             nickname = "user"
         )
 
+        val user = User(
+            id = 1,
+            email = command.email,
+            nickname = command.nickname,
+            password = command.password,
+            authType = AuthType.EMAIL_PASSWORD,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now(),
+        )
+
         // when
         coEvery { validationService.validateEmail(command.email) } just Runs
         coEvery { validationService.validatePassword(command.password) } just Runs
-        coEvery { userFindPort.findByEmail(command.email) } returns null
-        coEvery { userSignUpPort.signup(command) } just Runs
+        coEvery { userSignUpPort.signup(command) } returns user
 
         userSignUpService.execute(command)
 
         // then
-        coVerify { userFindPort.findByEmail(command.email) }
         coVerify { userSignUpPort.signup(command) }
     }
 
     @Test
-    fun `사용자 회원가입시 이미 존재하는 이메일이면 UserExistsException을 던진다`() = runTest {
+    fun `사용자 회원가입시 이미 존재하는 이메일이면 회원가입 실패`() = runTest {
         // given
         val command = UserSignUpCommand(
             email = "user@example.com",
             password = "password12@",
             nickname = "user"
         )
-
-        val existingUser = UserEntity(
-            email = command.email,
-            password = command.password,
-            nickname = command.nickname
-        )
-
         // when
         coEvery { validationService.validateEmail(command.email) } just Runs
         coEvery { validationService.validatePassword(command.password) } just Runs
-        coEvery { userFindPort.findByEmail(command.email) } returns existingUser
+
+        coEvery { userSignUpPort.signup(command) } throws UserEmailAlreadyException()
 
         // then
-        assertThrows<UserExistsException> { userSignUpService.execute(command) }
+        assertThrows<UserEmailAlreadyException> { userSignUpService.execute(command) }
+
+        coVerify(exactly = 1) { validationService.validateEmail(command.email) }
+        coVerify(exactly = 1) { validationService.validatePassword(command.password) }
+        coVerify(exactly = 1) { userSignUpPort.signup(command) }
     }
 
-    @Test
-    fun `사용자 회원가입시 이메일이 유효하지 않으면 예외를 던진다`() = runTest {
+    @ParameterizedTest
+    @MethodSource("invalidEmails")
+    fun `사용자 회원가입시 유효한 형식이 아닌 이메일이라면 회원가입 실패`(email: String) = runTest {
         // given
         val command = UserSignUpCommand(
-            email = "invalid-email",
+            email = email,
             password = "password12!",
             nickname = "user"
         )
@@ -102,17 +129,18 @@ class UserSignUpServiceTest {
         }
 
         // then
-        coVerify { validationService.validateEmail(command.email) }
-        coVerify(exactly = 0) { userFindPort.findByEmail(command.email) }
+        coVerify(exactly = 1) { validationService.validateEmail(command.email) }
+        coVerify(exactly = 0) { validationService.validatePassword(command.password) }
         coVerify(exactly = 0) { userSignUpPort.signup(command) }
     }
 
-    @Test
-    fun `사용자 회원가입 시 패스워드가 유효하지 않으면 예외를 던진다`() = runTest {
+    @ParameterizedTest
+    @MethodSource("invalidPasswords")
+    fun `사용자 회원가입 시 유효한 형식이 아닌 패스워드라면 회원가입 실패`(password: String) = runTest {
         // given
         val command = UserSignUpCommand(
             email = "user@example.com",
-            password = "invalidpass",
+            password = password,
             nickname = "user"
         )
 
@@ -125,8 +153,8 @@ class UserSignUpServiceTest {
         }
 
         // then
-        coVerify { validationService.validatePassword(command.password) }
-        coVerify(exactly = 0) { userFindPort.findByEmail(command.email) }
+        coVerify(exactly = 1) { validationService.validateEmail(command.email) }
+        coVerify(exactly = 1) { validationService.validatePassword(command.password) }
         coVerify(exactly = 0) { userSignUpPort.signup(command) }
     }
 

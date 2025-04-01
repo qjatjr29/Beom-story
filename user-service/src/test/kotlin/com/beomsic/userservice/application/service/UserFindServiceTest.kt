@@ -1,8 +1,9 @@
 package com.beomsic.userservice.application.service
 
-import com.beomsic.userservice.adapter.out.persistence.UserEntity
 import com.beomsic.userservice.application.port.out.UserFindPort
 import com.beomsic.userservice.domain.exception.UserNotFoundException
+import com.beomsic.userservice.domain.model.AuthType
+import com.beomsic.userservice.domain.model.User
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -10,7 +11,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -38,15 +39,16 @@ class UserFindServiceTest {
 
         // given
         val userId = 1L
-        val userEntity = UserEntity(
+        val user = User(
             id = userId,
             email = "test@example.com",
             password = "password12!",
             nickname = "testUser",
+            authType = AuthType.EMAIL_PASSWORD,
             createdAt = LocalDateTime.of(2025, 1, 1, 12, 30),
             updatedAt = LocalDateTime.of(2025, 1, 1, 12, 30)
         )
-        coEvery { userFindPort.findById(userId) } returns userEntity
+        coEvery { userFindPort.findById(userId) } returns user
 
         // when
         val result = userFindService.findById(userId)
