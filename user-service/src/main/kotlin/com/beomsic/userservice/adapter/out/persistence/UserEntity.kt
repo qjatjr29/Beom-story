@@ -1,5 +1,6 @@
 package com.beomsic.userservice.adapter.out.persistence
 
+import com.beomsic.userservice.domain.model.AuthType
 import com.beomsic.userservice.domain.model.User
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
@@ -46,7 +47,16 @@ data class UserEntity (
         nickname = nickname,
         password = password,
         profileUrl = profileUrl,
+        authType = authType,
         createdAt = createdAt ?: throw RuntimeException("Failed to convert entity to domain"),
         updatedAt = updatedAt ?: throw RuntimeException("Failed to convert entity to domain")
     )
+
+    val authType: AuthType
+        get() = when {
+            password != null && provider == null -> AuthType.EMAIL_PASSWORD
+            password == null && provider != null -> AuthType.OAUTH
+            password != null && provider != null -> AuthType.HYBRID
+            else -> throw IllegalStateException("Invalid user authentication state")
+        }
 }

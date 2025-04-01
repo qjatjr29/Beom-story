@@ -8,6 +8,7 @@ data class User (
     val nickname: String,
     val password: String? = null,
     val profileUrl: String? = null,
+    val authType: AuthType,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
 )
