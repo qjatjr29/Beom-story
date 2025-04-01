@@ -2,6 +2,7 @@ package com.beomsic.userservice.adapter.out.persistence.adapter
 
 import com.beomsic.userservice.application.port.out.UserLoginPort
 import com.beomsic.userservice.application.service.auth.JwtTokenProvider
+import com.beomsic.userservice.domain.exception.InvalidJwtTokenException
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
@@ -36,7 +37,7 @@ class UserLoginAdapter(
             .get("refreshToken:$userId")
 
         if (storedRefreshToken.isNullOrEmpty() || storedRefreshToken != refreshToken) {
-            throw IllegalArgumentException("Refresh Token이 유효하지 않거나 일치하지 않습니다.")
+            throw InvalidJwtTokenException("Refresh Token이 유효하지 않거나 일치하지 않습니다.")
         }
 
         // 유효한 경우 새로운 Access Token 발급
