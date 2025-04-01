@@ -19,9 +19,11 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDateTime
 
 @ExtendWith(MockKExtension::class)
+@ActiveProfiles("test")
 class UserSignUpServiceTest {
 
     @MockK
@@ -35,7 +37,7 @@ class UserSignUpServiceTest {
 
     @BeforeEach
     fun setUp() {
-        clearMocks(userSignUpPort) // 테스트마다 Mock 초기화
+        clearMocks(userSignUpPort, validationService) // 테스트마다 Mock 초기화
     }
 
     companion object {
