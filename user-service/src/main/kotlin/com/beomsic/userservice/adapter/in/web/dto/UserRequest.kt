@@ -17,5 +17,6 @@ data class UserNicknameUpdateRequest (
 )
 
 data class UserPasswordUpdateRequest (
-    val password: String,
+    val currentPassword: String,
+    val newPassword: String,
 )
