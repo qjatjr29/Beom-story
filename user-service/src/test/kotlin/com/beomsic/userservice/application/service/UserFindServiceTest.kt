@@ -11,7 +11,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -39,11 +39,14 @@ class UserFindServiceTest {
 
         // given
         val userId = 1L
+        val email = "test@example.com"
+        val password = "password12!"
+        val nickname = "testUser"
         val user = User(
             id = userId,
-            email = "test@example.com",
-            password = "password12!",
-            nickname = "testUser",
+            email = email,
+            password = password,
+            nickname = nickname,
             authType = AuthType.EMAIL_PASSWORD,
             createdAt = LocalDateTime.of(2025, 1, 1, 12, 30),
             updatedAt = LocalDateTime.of(2025, 1, 1, 12, 30)
@@ -54,9 +57,9 @@ class UserFindServiceTest {
         val result = userFindService.findById(userId)
 
         // then
-        assertEquals(userId, result.id)
-        assertEquals("test@example.com", result.email)
-        assertEquals("testUser", result.nickname)
+        assertThat(result.id).isEqualTo(userId)
+        assertThat(result.email).isEqualTo(userId)
+        assertThat(result.nickname).isEqualTo(nickname)
         coVerify { userFindPort.findById(userId) }
     }
 
