@@ -23,8 +23,8 @@ class UserUpdateService(
     @Transactional
     override suspend fun updateUserPassword(command: UserPasswordUpdateCommand) {
         if (command.userId != command.authUserId) throw AuthenticationException()
-        validationService.validatePassword(command.password)
-        userUpdatePort.updatePassword(command.userId, command.password)
+        validationService.validatePassword(command.newPassword)
+        userUpdatePort.updatePassword(command.userId, command.oldPassword, command.newPassword)
     }
 
     @Transactional

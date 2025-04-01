@@ -30,7 +30,7 @@ class UserUpdateController(
     suspend fun updateUserPassword(@AuthToken authUser: AuthUser,
                                    @PathVariable userId: Long,
                                    @RequestBody request: UserPasswordUpdateRequest) {
-        val command = UserPasswordUpdateCommand(userId, authUser.id, request.password)
+        val command = UserPasswordUpdateCommand(userId, authUser.id, request.currentPassword, request.newPassword)
         userUpdateUseCase.updateUserPassword(command)
     }
 
