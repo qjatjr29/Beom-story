@@ -30,8 +30,7 @@ class OAuthService(
             ?: userSignUpPort.oauthSignup(userInfo)
 
         val accessToken = userLoginPort.login(user.id, user.email)
-
-        return UserDto(user.id, user.email, user.nickname, accessToken, user.createdAt, user.updatedAt)
+        return UserDto(user, accessToken)
     }
 
     private fun getSocialType(provider: String): SocialType = SocialType.fromProvider(provider)

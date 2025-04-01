@@ -1,4 +1,4 @@
-package com.beomsic.userservice.application.service
+package com.beomsic.userservice.application.service.auth
 
 import com.beomsic.userservice.application.port.`in`.command.UserLoginCommand
 import com.beomsic.userservice.application.port.`in`.usecase.UserLoginUseCase
@@ -26,7 +26,7 @@ class UserLoginService(
         }
 
         val accessToken = userLoginPort.login(userId = user.id, email = user.email)
-        return UserDto(user.id, user.email, user.nickname, accessToken, user.createdAt, user.updatedAt)
+        return UserDto(user, accessToken)
     }
 
     override suspend fun reissueToken(refreshToken: String): String {
