@@ -1,8 +1,11 @@
 package com.beomsic.userservice.adapter.`in`.web
 
+import com.beomsic.userservice.adapter.`in`.web.dto.UserDetailResponse
 import com.beomsic.userservice.application.port.`in`.usecase.UserFindUseCase
-import com.beomsic.userservice.domain.User
+import com.beomsic.userservice.application.service.dto.UserDto
 import com.beomsic.userservice.domain.exception.UserNotFoundException
+import com.beomsic.userservice.domain.model.AuthType
+import com.beomsic.userservice.infrastructure.config.AuthTokenResolver
 import io.mockk.MockKAnnotations
 import io.mockk.clearMocks
 import io.mockk.coEvery
@@ -11,23 +14,21 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
-import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.HttpHeaders
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
+import java.time.LocalDateTime
 
-@SpringBootTest
 @AutoConfigureWebTestClient
 @ExtendWith(MockKExtension::class)
 @ActiveProfiles("test")
 class UserFindControllerTest {
 
-    @Autowired
-    @InjectMockKs
     private lateinit var webTestClient: WebTestClient
 
     @MockK
@@ -41,6 +42,7 @@ class UserFindControllerTest {
         val globalExceptionHandler: GlobalExceptionHandler = GlobalExceptionHandler()
         webTestClient = WebTestClient
             .bindToController(userFindController)
+            .argumentResolvers { it.addCustomResolver(AuthTokenResolver()) }
             .controllerAdvice(globalExceptionHandler)
             .configureClient()
             .build()
@@ -53,15 +55,20 @@ class UserFindControllerTest {
     }
 
     @Test
-    fun `유저 조회 - ID로 유저 조회`() = runTest {
+    fun `id를 통한 유저 조회 요청 정상 동작`() = runTest {
         // given
         val userId = 1L
-        val user = User(
+        val email = "user@example.com"
+        val nickname = "testUser"
+        val userDto = UserDto(
             id = userId,
-            email = "test@example.com",
-            nickname = "testUser"
+            email = email,
+            nickname = nickname,
+            authType = AuthType.EMAIL_PASSWORD,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now(),
         )
-        coEvery { userFindUseCase.findById(userId) } returns user
+        coEvery { userFindUseCase.findById(userId) } returns userDto
 
         // when
         webTestClient.get()
@@ -70,8 +77,8 @@ class UserFindControllerTest {
             .expectStatus().isOk
             .expectBody()
             .jsonPath("$.id").isEqualTo(userId)
-            .jsonPath("$.email").isEqualTo("test@example.com")
-            .jsonPath("$.username").isEqualTo("testUser")
+            .jsonPath("$.email").isEqualTo(email)
+            .jsonPath("$.nickname").isEqualTo(nickname)
 
         // then
         coVerify { userFindUseCase.findById(userId) }
@@ -79,7 +86,7 @@ class UserFindControllerTest {
 
 
     @Test
-    fun `유저 조회 - 존재하지 않는 ID로 조회 시 404 반환`() {
+    fun `존재하지 않는 id로 조회 요청시 404 예외 반환`() {
         // given
         val userId = 999L
         coEvery { userFindUseCase.findById(userId) } throws UserNotFoundException()
@@ -94,5 +101,47 @@ class UserFindControllerTest {
         coVerify { userFindUseCase.findById(userId) }
     }
 
+    @Test
+    fun `내 정보 조회 요청 정상 동작`() {
+        // given
+        val userId = 1L
+        val email = "test@example.com"
+        val accessToken = "testAccessToken"
+        val nickname = "testUser"
+        val userDto = UserDto(
+            id = userId,
+            email = email,
+            nickname = nickname,
+            authType = AuthType.EMAIL_PASSWORD,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now(),
+        )
 
+        coEvery { userFindUseCase.findById(userId) } returns userDto
+
+        // when & then
+        webTestClient.get().uri("/user-service/me")
+            .header(HttpHeaders.AUTHORIZATION, "Bearer $accessToken")
+            .header("userId", userId.toString())
+            .header("email", email)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(UserDetailResponse::class.java)
+            .consumeWith { response ->
+                val body = response.responseBody
+                assertThat(body).isNotNull
+                assertThat(body?.id).isEqualTo(userId)
+                assertThat(body?.email).isEqualTo(email)
+            }
+
+        coVerify { userFindUseCase.findById(userId) }
+    }
+
+    @Test
+    fun `헤더에 토큰이 없이 내 정보 조회시 예외가 발생`() {
+        // when & then
+        webTestClient.get().uri("/user-service/me")
+            .exchange()
+            .expectStatus().is4xxClientError
+    }
 }
