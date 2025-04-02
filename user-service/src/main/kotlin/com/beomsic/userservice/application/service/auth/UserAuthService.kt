@@ -5,8 +5,8 @@ import com.beomsic.userservice.application.port.`in`.usecase.UserAuthUseCase
 import com.beomsic.userservice.application.port.out.UserAuthPort
 import com.beomsic.userservice.application.port.out.UserFindPort
 import com.beomsic.userservice.application.service.dto.UserDto
-import com.beomsic.userservice.domain.exception.InvalidPasswordException
 import com.beomsic.userservice.domain.exception.PasswordNotMatchedException
+import com.beomsic.userservice.domain.exception.PasswordNotSetException
 import com.beomsic.userservice.infrastructure.util.BCryptUtils
 import org.springframework.stereotype.Service
 
@@ -19,7 +19,7 @@ class UserAuthService(
     override suspend fun login(command: UserLoginCommand): UserDto {
         val user = userFindPort.findByEmail(command.email)
 
-        if (user.password == null) throw InvalidPasswordException("비밀번호가 설정되지 않았습니다!!")
+        if (user.password == null) throw PasswordNotSetException()
 
         if (!BCryptUtils.verify(command.password, user.password)) {
             throw PasswordNotMatchedException()

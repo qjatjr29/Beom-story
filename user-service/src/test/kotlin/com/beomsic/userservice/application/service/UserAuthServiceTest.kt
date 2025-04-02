@@ -5,8 +5,8 @@ import com.beomsic.userservice.application.port.out.UserAuthPort
 import com.beomsic.userservice.application.port.out.UserFindPort
 import com.beomsic.userservice.application.service.auth.UserAuthService
 import com.beomsic.userservice.domain.exception.InvalidJwtTokenException
-import com.beomsic.userservice.domain.exception.InvalidPasswordException
 import com.beomsic.userservice.domain.exception.PasswordNotMatchedException
+import com.beomsic.userservice.domain.exception.PasswordNotSetException
 import com.beomsic.userservice.domain.exception.UserNotFoundException
 import com.beomsic.userservice.domain.model.AuthType
 import com.beomsic.userservice.domain.model.User
@@ -114,7 +114,7 @@ class UserAuthServiceTest {
             coEvery { userFindPort.findByEmail(userEmail) } returns user
 
             // then
-            assertThrows<InvalidPasswordException> {
+            assertThrows<PasswordNotSetException> {
                 authService.login(userLoginCommand)
             }
         }

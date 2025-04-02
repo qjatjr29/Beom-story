@@ -2,6 +2,7 @@ package com.beomsic.userservice.infrastructure.config
 
 import com.beomsic.common.annotation.AuthToken
 import com.beomsic.common.model.AuthUser
+import com.beomsic.userservice.domain.exception.InvalidJwtTokenException
 import org.springframework.core.MethodParameter
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
@@ -29,7 +30,7 @@ class AuthTokenResolver : HandlerMethodArgumentResolver {
         // 요청 헤더 값에 Authorization 값이 존재할 경우 첫 번째 값을 리턴
 
         val authHeader = exchange.request.headers[HttpHeaders.AUTHORIZATION]?.firstOrNull()
-        val token = authHeader?.removePrefix("Bearer ") ?: throw IllegalArgumentException()
+        val token = authHeader?.removePrefix("Bearer ") ?: throw InvalidJwtTokenException()
 
         // "userId"와 "username"을 헤더에서 읽어오는 부분
         val userId = exchange.request.headers["userId"]?.firstOrNull()
