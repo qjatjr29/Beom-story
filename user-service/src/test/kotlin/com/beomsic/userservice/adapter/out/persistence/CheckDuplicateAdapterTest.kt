@@ -1,5 +1,6 @@
 package com.beomsic.userservice.adapter.out.persistence
 
+import com.beomsic.userservice.adapter.out.persistence.adapter.CheckDuplicateAdapter
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -7,8 +8,8 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.ActiveProfiles
@@ -39,7 +40,7 @@ class CheckDuplicateAdapterTest {
         val result = checkDuplicateAdapter.isDuplicatedEmail(email)
 
         // then
-        assertEquals(true, result)
+        assertThat(result).isTrue()
         coVerify { userRepository.existsByEmail(email) }
     }
 
@@ -54,7 +55,7 @@ class CheckDuplicateAdapterTest {
         val result = checkDuplicateAdapter.isDuplicatedEmail(email)
 
         // then
-        assertEquals(false, result)
+        assertThat(result).isFalse()
         coVerify { userRepository.existsByEmail(email) }
     }
 
@@ -70,7 +71,7 @@ class CheckDuplicateAdapterTest {
         val result = checkDuplicateAdapter.isDuplicatedNickname(nickname)
 
         // then
-        assertEquals(true, result)
+        assertThat(result).isTrue()
         coVerify { userRepository.existsByNickname(nickname) }
     }
 
@@ -86,7 +87,7 @@ class CheckDuplicateAdapterTest {
         val result = checkDuplicateAdapter.isDuplicatedNickname(nickname)
 
         // then
-        assertEquals(false, result)
+        assertThat(result).isFalse()
         coVerify { userRepository.existsByNickname(nickname) }
     }
 
