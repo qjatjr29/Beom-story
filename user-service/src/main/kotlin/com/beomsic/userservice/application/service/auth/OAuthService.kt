@@ -2,8 +2,8 @@ package com.beomsic.userservice.application.service.auth
 
 import com.beomsic.userservice.application.port.`in`.usecase.OAuthUserCase
 import com.beomsic.userservice.application.port.out.OAuthPort
+import com.beomsic.userservice.application.port.out.UserAuthPort
 import com.beomsic.userservice.application.port.out.UserFindPort
-import com.beomsic.userservice.application.port.out.UserLoginPort
 import com.beomsic.userservice.application.port.out.UserSignUpPort
 import com.beomsic.userservice.application.service.dto.UserDto
 import com.beomsic.userservice.domain.oauth.SocialType
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 class OAuthService(
     private val oauthPort: OAuthPort,
     private val userFindPort: UserFindPort,
-    private val userLoginPort: UserLoginPort,
+    private val userAuthPort: UserAuthPort,
     private val userSignUpPort: UserSignUpPort
 ): OAuthUserCase {
 
@@ -29,7 +29,7 @@ class OAuthService(
         val user = userFindPort.findByProviderAndProviderId(provider, userInfo.providerId)
             ?: userSignUpPort.oauthSignup(userInfo)
 
-        val accessToken = userLoginPort.login(user.id, user.email)
+        val accessToken = userAuthPort.login(user.id, user.email)
         return UserDto(user, accessToken)
     }
 
