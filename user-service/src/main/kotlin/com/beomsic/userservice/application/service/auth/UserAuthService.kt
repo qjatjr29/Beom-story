@@ -1,9 +1,9 @@
 package com.beomsic.userservice.application.service.auth
 
 import com.beomsic.userservice.application.port.`in`.command.UserLoginCommand
-import com.beomsic.userservice.application.port.`in`.usecase.UserLoginUseCase
+import com.beomsic.userservice.application.port.`in`.usecase.UserAuthUseCase
+import com.beomsic.userservice.application.port.out.UserAuthPort
 import com.beomsic.userservice.application.port.out.UserFindPort
-import com.beomsic.userservice.application.port.out.UserLoginPort
 import com.beomsic.userservice.application.service.dto.UserDto
 import com.beomsic.userservice.domain.exception.InvalidPasswordException
 import com.beomsic.userservice.domain.exception.PasswordNotMatchedException
@@ -11,10 +11,10 @@ import com.beomsic.userservice.infrastructure.util.BCryptUtils
 import org.springframework.stereotype.Service
 
 @Service
-class UserLoginService(
+class UserAuthService(
     private val userFindPort: UserFindPort,
-    private val userLoginPort: UserLoginPort
-): UserLoginUseCase {
+    private val userAuthPort: UserAuthPort
+): UserAuthUseCase {
 
     override suspend fun login(command: UserLoginCommand): UserDto {
         val user = userFindPort.findByEmail(command.email)
@@ -25,16 +25,16 @@ class UserLoginService(
             throw PasswordNotMatchedException()
         }
 
-        val accessToken = userLoginPort.login(userId = user.id, email = user.email)
+        val accessToken = userAuthPort.login(userId = user.id, email = user.email)
         return UserDto(user, accessToken)
     }
 
-    override suspend fun reissueToken(refreshToken: String): String {
-        return userLoginPort.reissue(refreshToken)
+    override suspend fun logout(userId: Long,  accessToken: String) {
+        userFindPort.findById(userId)
+        userAuthPort.logout(userId, accessToken)
     }
 
-    override suspend fun logout(userId: Long, accessToken: String) {
-        userFindPort.findById(userId)
-        userLoginPort.logout(userId, accessToken)
+    override suspend fun reissueToken(refreshToken: String): String {
+        return userAuthPort.reissue(refreshToken)
     }
 }

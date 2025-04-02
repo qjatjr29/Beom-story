@@ -1,6 +1,6 @@
 package com.beomsic.userservice.adapter.out.persistence.adapter
 
-import com.beomsic.userservice.application.port.out.UserLoginPort
+import com.beomsic.userservice.application.port.out.UserAuthPort
 import com.beomsic.userservice.application.service.auth.JwtTokenProvider
 import com.beomsic.userservice.domain.exception.InvalidJwtTokenException
 import org.springframework.data.redis.core.RedisTemplate
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
 @Component
-class UserLoginAdapter(
+class UserAuthAdapter(
     private val redisTemplate: RedisTemplate<String, String>,
     private val jwtTokenProvider: JwtTokenProvider
-): UserLoginPort {
+): UserAuthPort {
 
     override suspend fun login(userId: Long, email: String): String {
         redisTemplate.delete("logoutlist:$userId")

@@ -1,8 +1,8 @@
 package com.beomsic.userservice.application.service
 
 import com.beomsic.userservice.application.port.out.OAuthPort
+import com.beomsic.userservice.application.port.out.UserAuthPort
 import com.beomsic.userservice.application.port.out.UserFindPort
-import com.beomsic.userservice.application.port.out.UserLoginPort
 import com.beomsic.userservice.application.port.out.UserSignUpPort
 import com.beomsic.userservice.application.service.auth.OAuthService
 import com.beomsic.userservice.domain.model.AuthType
@@ -40,7 +40,7 @@ class OAuthServiceTest {
     private lateinit var userFindPort: UserFindPort
 
     @MockK
-    private lateinit var userLoginPort: UserLoginPort
+    private lateinit var userAuthPort: UserAuthPort
 
     @MockK
     private lateinit var userSignUpPort: UserSignUpPort
@@ -62,7 +62,7 @@ class OAuthServiceTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        clearMocks(oauthPort, userFindPort, userLoginPort, userSignUpPort)
+        clearMocks(oauthPort, userFindPort, userAuthPort, userSignUpPort)
     }
 
     @Test
@@ -98,7 +98,7 @@ class OAuthServiceTest {
         )
         coEvery { oauthPort.getUserInfo(socialType, code) } returns oAuthUserInfo
         coEvery { userFindPort.findByProviderAndProviderId(provider, oAuthUserInfo.providerId) } returns existingUser
-        coEvery { userLoginPort.login(existingUser.id, existingUser.email) } returns accessToken
+        coEvery { userAuthPort.login(existingUser.id, existingUser.email) } returns accessToken
 
         // when
         val result = oauthService.login(provider, code)
@@ -127,7 +127,7 @@ class OAuthServiceTest {
         coEvery { oauthPort.getUserInfo(socialType, code) } returns oAuthUserInfo
         coEvery { userFindPort.findByProviderAndProviderId(provider, oAuthUserInfo.providerId) } returns null
         coEvery { userSignUpPort.oauthSignup(oAuthUserInfo) } returns newUser
-        coEvery { userLoginPort.login(newUser.id, newUser.email) } returns accessToken
+        coEvery { userAuthPort.login(newUser.id, newUser.email) } returns accessToken
 
         // when
         val result = oauthService.login(provider, code)

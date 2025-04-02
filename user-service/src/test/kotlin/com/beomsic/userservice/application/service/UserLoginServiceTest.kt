@@ -1,9 +1,9 @@
 package com.beomsic.userservice.application.service
 
 import com.beomsic.userservice.application.port.`in`.command.UserLoginCommand
+import com.beomsic.userservice.application.port.out.UserAuthPort
 import com.beomsic.userservice.application.port.out.UserFindPort
-import com.beomsic.userservice.application.port.out.UserLoginPort
-import com.beomsic.userservice.application.service.auth.UserLoginService
+import com.beomsic.userservice.application.service.auth.UserAuthService
 import com.beomsic.userservice.domain.exception.InvalidJwtTokenException
 import com.beomsic.userservice.domain.exception.InvalidPasswordException
 import com.beomsic.userservice.domain.exception.PasswordNotMatchedException
@@ -27,20 +27,20 @@ import java.time.LocalDateTime
 
 @ExtendWith(MockKExtension::class)
 @ActiveProfiles("test")
-class UserLoginServiceTest {
+class UserAuthServiceTest {
 
     @MockK
     private lateinit var userFindPort: UserFindPort
 
     @MockK
-    private lateinit var userLoginPort: UserLoginPort
+    private lateinit var userAuthPort: UserAuthPort
 
     @InjectMockKs
-    private lateinit var loginService: UserLoginService
+    private lateinit var authService: UserAuthService
 
     @BeforeEach
     fun setUp() {
-        clearMocks(userFindPort, userLoginPort)
+        clearMocks(userFindPort, userAuthPort)
     }
 
     @Nested
@@ -70,12 +70,12 @@ class UserLoginServiceTest {
             // when
             coEvery { userFindPort.findByEmail(userEmail) } returns user
             coEvery { BCryptUtils.verify(any(), any()) } returns true
-            coEvery { userLoginPort.login(userId = userId, email = userEmail) } returns exceptedToken
+            coEvery { userAuthPort.login(userId = userId, email = userEmail) } returns exceptedToken
 
             // then
-            val result = loginService.login(userLoginCommand)
+            val result = authService.login(userLoginCommand)
             coVerify(exactly = 1) { userFindPort.findByEmail(userEmail) }
-            coVerify(exactly = 1) { userLoginPort.login(userId = userId, email = userEmail) }
+            coVerify(exactly = 1) { userAuthPort.login(userId = userId, email = userEmail) }
             Assertions.assertThat(result.id).isEqualTo(userId)
             Assertions.assertThat(result.email).isEqualTo(userEmail)
             Assertions.assertThat(result.accessToken).isEqualTo(exceptedToken)
@@ -92,7 +92,7 @@ class UserLoginServiceTest {
 
             // then
             assertThrows<UserNotFoundException> {
-                loginService.login(userLoginCommand)
+                authService.login(userLoginCommand)
             }
         }
 
@@ -115,7 +115,7 @@ class UserLoginServiceTest {
 
             // then
             assertThrows<InvalidPasswordException> {
-                loginService.login(userLoginCommand)
+                authService.login(userLoginCommand)
             }
         }
 
@@ -139,7 +139,7 @@ class UserLoginServiceTest {
 
             // then
             assertThrows<PasswordNotMatchedException> {
-                loginService.login(userLoginCommand)
+                authService.login(userLoginCommand)
             }
         }
     }
@@ -162,13 +162,13 @@ class UserLoginServiceTest {
 
             // when
             coEvery { userFindPort.findById(userId) } returns user
-            coEvery { userLoginPort.logout(userId, accessToken) } just Runs
+            coEvery { userAuthPort.logout(userId, accessToken) } just Runs
 
             // then
-            loginService.logout(userId, accessToken)
+            authService.logout(userId, accessToken)
 
             coVerify(exactly = 1) { userFindPort.findById(userId) }
-            coVerify(exactly = 1) { userLoginPort.logout(userId, accessToken) }
+            coVerify(exactly = 1) { userAuthPort.logout(userId, accessToken) }
         }
 
         @Test
@@ -182,11 +182,11 @@ class UserLoginServiceTest {
 
             // then
             assertThrows<UserNotFoundException> {
-                loginService.logout(userId, accessToken)
+                authService.logout(userId, accessToken)
             }
 
             coVerify(exactly = 1) { userFindPort.findById(userId) }
-            coVerify(exactly = 0) { userLoginPort.logout(any(), any()) }
+            coVerify(exactly = 0) { userAuthPort.logout(any(), any()) }
         }
 
         @Test
@@ -206,15 +206,15 @@ class UserLoginServiceTest {
 
             // when
             coEvery { userFindPort.findById(userId) } returns user
-            coEvery { userLoginPort.logout(userId, accessToken) } throws RuntimeException("로그아웃 실패")
+            coEvery { userAuthPort.logout(userId, accessToken) } throws RuntimeException("로그아웃 실패")
 
             // then
             assertThrows<RuntimeException> {
-                loginService.logout(userId, accessToken)
+                authService.logout(userId, accessToken)
             }
 
             coVerify(exactly = 1) { userFindPort.findById(userId) }
-            coVerify(exactly = 1) { userLoginPort.logout(userId, accessToken) }
+            coVerify(exactly = 1) { userAuthPort.logout(userId, accessToken) }
         }
 
     }
@@ -229,13 +229,13 @@ class UserLoginServiceTest {
             val newAccessToken = "newAccessToken"
 
             // when
-            coEvery { userLoginPort.reissue(refreshToken) } returns newAccessToken
+            coEvery { userAuthPort.reissue(refreshToken) } returns newAccessToken
 
             // then
-            val result = loginService.reissueToken(refreshToken)
+            val result = authService.reissueToken(refreshToken)
             Assertions.assertThat(result).isEqualTo(newAccessToken)
 
-            coVerify(exactly = 1) { userLoginPort.reissue(refreshToken) }
+            coVerify(exactly = 1) { userAuthPort.reissue(refreshToken) }
         }
 
         @Test
@@ -244,14 +244,14 @@ class UserLoginServiceTest {
             val refreshToken = "invalidRefreshToken"
 
             // when
-            coEvery { userLoginPort.reissue(refreshToken) } throws InvalidJwtTokenException()
+            coEvery { userAuthPort.reissue(refreshToken) } throws InvalidJwtTokenException()
 
             // then
             assertThrows<InvalidJwtTokenException> {
-                loginService.reissueToken(refreshToken)
+                authService.reissueToken(refreshToken)
             }
 
-            coVerify(exactly = 1) { userLoginPort.reissue(refreshToken) }
+            coVerify(exactly = 1) { userAuthPort.reissue(refreshToken) }
         }
 
         @Test
@@ -260,14 +260,14 @@ class UserLoginServiceTest {
             val refreshToken = "validRefreshToken"
 
             // when
-            coEvery { userLoginPort.reissue(refreshToken) } throws RuntimeException()
+            coEvery { userAuthPort.reissue(refreshToken) } throws RuntimeException()
 
             // then
             assertThrows<RuntimeException> {
-                loginService.reissueToken(refreshToken)
+                authService.reissueToken(refreshToken)
             }
 
-            coVerify(exactly = 1) { userLoginPort.reissue(refreshToken) }
+            coVerify(exactly = 1) { userAuthPort.reissue(refreshToken) }
         }
     }
 
