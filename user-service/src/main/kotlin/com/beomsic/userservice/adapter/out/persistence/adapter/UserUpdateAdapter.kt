@@ -4,6 +4,7 @@ import com.beomsic.userservice.adapter.out.persistence.UserEntity
 import com.beomsic.userservice.adapter.out.persistence.UserRepository
 import com.beomsic.userservice.adapter.out.persistence.findByIdOrNull
 import com.beomsic.userservice.application.port.out.UserUpdatePort
+import com.beomsic.userservice.domain.exception.PasswordNotMatchedException
 import com.beomsic.userservice.domain.model.AuthType
 import com.beomsic.userservice.domain.model.User
 import com.beomsic.userservice.infrastructure.util.BCryptUtils
@@ -39,8 +40,10 @@ class UserUpdateAdapter(
         return updateAction(userEntity)
     }
 
-    private suspend fun checkPassword(password: String, userPassword: String?): Boolean {
+    private suspend fun checkPassword(password: String, userPassword: String?) {
         checkNotNull(userPassword)
-        return BCryptUtils.verify(password, userPassword)
+        if (!BCryptUtils.verify(password, userPassword)) {
+            throw PasswordNotMatchedException()
+        }
     }
 }
