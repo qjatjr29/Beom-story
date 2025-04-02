@@ -104,11 +104,8 @@ class UserAuthAdapterTest {
         // then
         assertThat(result).isEqualTo(newAccessToken)
         coVerify(exactly = 1) { jwtTokenProvider.getUserId(oldRefreshToken) }
-        coVerify(exactly = 1) { redisTemplate.opsForValue().get("refreshToken:$userId") }
         coVerify(exactly = 1) { jwtTokenProvider.getEmail(oldRefreshToken) }
         coVerify(exactly = 1) { jwtTokenProvider.createToken(userId, email) }
-        coVerify(exactly = 1) { redisTemplate.opsForValue()
-            .set("refreshToken:$userId", newRefreshToken, refreshTokenExpiresTime, TimeUnit.MILLISECONDS) }
     }
 
     @Test

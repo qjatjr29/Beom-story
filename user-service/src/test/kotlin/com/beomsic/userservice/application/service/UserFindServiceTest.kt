@@ -58,7 +58,7 @@ class UserFindServiceTest {
 
         // then
         assertThat(result.id).isEqualTo(userId)
-        assertThat(result.email).isEqualTo(userId)
+        assertThat(result.email).isEqualTo(email)
         assertThat(result.nickname).isEqualTo(nickname)
         coVerify { userFindPort.findById(userId) }
     }
