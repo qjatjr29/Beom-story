@@ -16,7 +16,7 @@ data class UserNicknameUpdateCommand (
 data class UserPasswordUpdateCommand (
     override val userId: Long,
     override val authUserId: Long,
-    val oldPassword: String,
+    val currentPassword: String,
     val newPassword: String,
 ): UserUpdateCommand
 
