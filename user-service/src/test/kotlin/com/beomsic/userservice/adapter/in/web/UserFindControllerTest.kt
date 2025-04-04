@@ -1,5 +1,6 @@
 package com.beomsic.userservice.adapter.`in`.web
 
+import com.beomsic.common.exception.ErrorResponse
 import com.beomsic.userservice.adapter.`in`.web.dto.UserDetailResponse
 import com.beomsic.userservice.application.port.`in`.usecase.UserFindUseCase
 import com.beomsic.userservice.application.service.dto.UserDto
@@ -46,10 +47,6 @@ class UserFindControllerTest {
             .controllerAdvice(globalExceptionHandler)
             .configureClient()
             .build()
-    }
-
-    @BeforeEach
-    fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         clearMocks(userFindUseCase)
     }
@@ -75,11 +72,12 @@ class UserFindControllerTest {
             .uri("/user-service/$userId")
             .exchange()
             .expectStatus().isOk
-            .expectBody()
-            .jsonPath("$.id").isEqualTo(userId)
-            .jsonPath("$.email").isEqualTo(email)
-            .jsonPath("$.nickname").isEqualTo(nickname)
-
+            .expectBody(UserDetailResponse::class.java)
+            .value { response ->
+                assertThat(response.id).isEqualTo(userId)
+                assertThat(response.email).isEqualTo(email)
+                assertThat(response.nickname).isEqualTo(nickname)
+            }
         // then
         coVerify { userFindUseCase.findById(userId) }
     }
@@ -95,8 +93,11 @@ class UserFindControllerTest {
             .uri("/user-service/$userId")
             .exchange()
             .expectStatus().isNotFound
-            .expectBody()
-            .jsonPath("$.message").isEqualTo("유저가 존재하지 않습니다.")
+            .expectBody(ErrorResponse::class.java)
+            .value { response ->
+                assertThat(response.message).isEqualTo("유저가 존재하지 않습니다.")
+                assertThat(response.code).isEqualTo(404)
+            }
 
         coVerify { userFindUseCase.findById(userId) }
     }
@@ -127,11 +128,10 @@ class UserFindControllerTest {
             .exchange()
             .expectStatus().isOk
             .expectBody(UserDetailResponse::class.java)
-            .consumeWith { response ->
-                val body = response.responseBody
-                assertThat(body).isNotNull
-                assertThat(body?.id).isEqualTo(userId)
-                assertThat(body?.email).isEqualTo(email)
+            .value { response ->
+                assertThat(response).isNotNull
+                assertThat(response.id).isEqualTo(userId)
+                assertThat(response.email).isEqualTo(email)
             }
 
         coVerify { userFindUseCase.findById(userId) }
