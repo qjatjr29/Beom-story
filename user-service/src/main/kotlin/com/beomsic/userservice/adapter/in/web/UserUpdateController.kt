@@ -34,4 +34,10 @@ class UserUpdateController(
         userUpdateUseCase.updateUserPassword(command)
     }
 
+    @DeleteMapping("/{userId}/withdrawal")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    suspend fun deleteUser(@AuthToken authUser: AuthUser, @PathVariable userId: Long) {
+        userUpdateUseCase.deleteUser(userId, authUser.id)
+    }
+
 }
