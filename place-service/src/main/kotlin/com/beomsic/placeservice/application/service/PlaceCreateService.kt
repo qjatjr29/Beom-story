@@ -19,9 +19,9 @@ class PlaceCreateService(
     private val eventPublisher: EventPublisher
 ) : PlaceCreateUseCase {
 
+    @Transactional
     override suspend fun execute(command: PlaceCreateCommand, image: FilePart?): Place {
         var uploadedImageUrl: String? = null
-
         try {
             // 1. 이미지 비동기 업로드
             if (image != null) {
@@ -29,18 +29,12 @@ class PlaceCreateService(
                 command.imageUrl = uploadedImageUrl
             }
             // 2. DB 트랜잭션 내에서 장소 엔티티 생성
-            return transactionalCreatePlace(command)
+            return placeCreatePort.create(command)
         } catch (ex: Exception) {
             if (uploadedImageUrl != null) {
                 eventPublisher.publishImageEvent(ImageRollbackEvent(uploadedImageUrl))
             }
             throw ServerException(ex.message ?: "Server Exception", ex)
         }
-    }
-
-    @Transactional
-    private suspend fun transactionalCreatePlace(command: PlaceCreateCommand): Place {
-        val placeEntity = placeCreatePort.create(command)
-        return placeEntity.toDomain()
     }
 }

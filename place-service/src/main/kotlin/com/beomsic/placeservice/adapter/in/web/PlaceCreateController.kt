@@ -4,6 +4,7 @@ import com.beomsic.common.annotation.AuthToken
 import com.beomsic.common.model.AuthUser
 import com.beomsic.placeservice.application.port.`in`.command.PlaceCreateCommand
 import com.beomsic.placeservice.application.port.`in`.usecase.PlaceCreateUseCase
+import com.beomsic.placeservice.domain.Category
 import com.beomsic.placeservice.domain.Place
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -35,7 +36,7 @@ class PlaceCreateController(
             authorId = authorId,
             name = this.name,
             description = this.description,
-            category = this.category,
+            category = Category.fromValue(this.category),
             longitude = this.longitude,
             latitude = this.latitude
         )

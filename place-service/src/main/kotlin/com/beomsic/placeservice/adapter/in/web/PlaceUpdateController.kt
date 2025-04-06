@@ -4,6 +4,7 @@ import com.beomsic.common.annotation.AuthToken
 import com.beomsic.common.model.AuthUser
 import com.beomsic.placeservice.application.port.`in`.command.PlaceUpdateCommand
 import com.beomsic.placeservice.application.port.`in`.usecase.PlaceUpdateUseCase
+import com.beomsic.placeservice.domain.Category
 import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.web.bind.annotation.PatchMapping
@@ -44,7 +45,7 @@ class PlaceUpdateController(
             authorId = authorId,
             name = this.name,
             description = this.description,
-            category = this.category,
+            category = Category.fromValue(this.category),
             longitude = this.longitude,
             latitude = this.latitude
         )

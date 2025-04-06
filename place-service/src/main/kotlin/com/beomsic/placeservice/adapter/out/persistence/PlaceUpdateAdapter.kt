@@ -15,11 +15,11 @@ class PlaceUpdateAdapter(
         val existingPlace = placeRepository.findByIdOrNull(placeId)
 
         existingPlace.apply {
-            command.name?.let { this.name = it }
+            command.name.let { this.name = it }
             command.description?.let { this.description = it }
-            command.category?.let { this.category = Category.fromString(it) }
-            command.latitude?.let { this.latitude = it }
-            command.longitude?.let { this.longitude = it }
+            command.category.let { this.category = it }
+            command.latitude.let { this.latitude = it }
+            command.longitude.let { this.longitude = it }
         }
 
         return placeRepository.save(existingPlace)
