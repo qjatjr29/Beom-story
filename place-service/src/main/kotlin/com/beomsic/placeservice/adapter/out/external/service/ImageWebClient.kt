@@ -23,7 +23,6 @@ class ImageWebClient(
     suspend fun uploadImage(image: FilePart): String {
 
         val body = MultipartBodyBuilder().apply {
-//            part("placeId", placeId)
             part("image", image)
         }.build()
 
