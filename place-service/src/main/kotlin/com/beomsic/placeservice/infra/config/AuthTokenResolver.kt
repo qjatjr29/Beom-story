@@ -1,4 +1,4 @@
-package com.beomsic.placeservice.config
+package com.beomsic.placeservice.infra.config
 
 import com.beomsic.common.annotation.AuthToken
 import com.beomsic.common.model.AuthUser
@@ -16,14 +16,10 @@ class AuthTokenResolver : HandlerMethodArgumentResolver {
         return parameter.hasParameterAnnotation(AuthToken::class.java)
     }
 
-    override fun resolveArgument(
-        parameter: MethodParameter,
-        bindingContext: BindingContext,
-        exchange: ServerWebExchange
-    ): Mono<Any> {
+    override fun resolveArgument(parameter: MethodParameter,
+                                 bindingContext: BindingContext, exchange: ServerWebExchange): Mono<Any> {
         val authHeader = exchange.request.headers[HttpHeaders.AUTHORIZATION]?.firstOrNull()
         val token = authHeader?.removePrefix("Bearer ") ?: throw IllegalArgumentException()
-        println("token: $token")
         val userId = exchange.request.headers["userId"]?.firstOrNull()
         val email = exchange.request.headers["email"]?.firstOrNull()
 

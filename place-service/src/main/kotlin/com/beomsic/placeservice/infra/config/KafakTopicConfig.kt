@@ -1,4 +1,4 @@
-package com.beomsic.placeservice.config
+package com.beomsic.placeservice.infra.config
 
 import jakarta.annotation.PostConstruct
 import org.apache.kafka.clients.admin.NewTopic

@@ -1,4 +1,4 @@
-package com.beomsic.placeservice.config
+package com.beomsic.placeservice.infra.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.config.WebFluxConfigurer

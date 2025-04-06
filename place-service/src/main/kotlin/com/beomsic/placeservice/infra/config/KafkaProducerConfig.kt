@@ -1,4 +1,4 @@
-package com.beomsic.placeservice.config
+package com.beomsic.placeservice.infra.config
 
 import io.asyncer.r2dbc.mysql.client.Client.logger
 import mu.KotlinLogging
@@ -51,7 +51,6 @@ fun <K : Any, V> KafkaTemplate<K, V>.sendMessageWithCallback(topic: String, key:
     send(topic, key, value)
         .whenComplete { result, ex ->
             if (ex != null) {
-                println("Kafka message delivery failed: ${ex.message}")
                 logger.error(ex.message, ex)
                 // 예외 상황에 대한 재시도 또는 알람 처리
             } else {
