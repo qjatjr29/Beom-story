@@ -31,7 +31,7 @@ data class PlaceEntity(
     var imageUrl: String?,
 
     @Column
-    var category: Category? = Category.기타,
+    var category: Category,
 
     @Column
     var latitude: Double?,

@@ -9,7 +9,7 @@ data class Place (
     val name: String,
     val description: String?,
     val imageUrl: String?,
-    val category: Category? = Category.기타,
+    val category: Category? = Category.OTHER,
     val latitude: Double?,
     val longitude: Double?,
     val createdAt: LocalDateTime,
