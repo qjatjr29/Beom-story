@@ -9,4 +9,5 @@ enum class Category (val value: String) {
     HEALTH("건강"),
     STUDY("학습"),
     WORK("업무"),
+    ETC("기타")
 }

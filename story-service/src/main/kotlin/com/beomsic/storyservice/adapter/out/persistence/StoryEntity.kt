@@ -1,19 +1,17 @@
-package com.beomsic.storyservice.infrastructure.persistence
+package com.beomsic.storyservice.adapter.out.persistence
 
 import com.beomsic.storyservice.domain.model.Category
 import com.beomsic.storyservice.domain.model.Story
-import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
-import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import org.springframework.data.relational.core.mapping.Column
+import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 
 @Table(name = "story")
-@Entity
-@EntityListeners(AuditingEntityListener::class)
-class StoryEntity(
+data class StoryEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
     @Column
@@ -26,7 +24,7 @@ class StoryEntity(
     val description: String?,
 
     @Column
-    val category: String,
+    val category: Category,
 
     @Column
     val startDate: LocalDateTime?,
@@ -34,8 +32,11 @@ class StoryEntity(
     @Column
     val endDate: LocalDateTime?,
 
+    @Column
+    val status: StoryStatus,
+
     @CreatedDate
-    @Column(updatable = false)
+    @Column
     var createdAt: LocalDateTime? = null,
 
     @LastModifiedDate
@@ -48,7 +49,7 @@ class StoryEntity(
         authorId = authorId,
         title = title,
         description = description,
-        category = Category.entries.find { it.value == category } ?: Category.DAILY_RECORD,
+        category = category,
         startDate = startDate!!,
         endDate = endDate!!,
         createdAt = createdAt!!,
