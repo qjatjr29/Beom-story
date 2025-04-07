@@ -24,7 +24,7 @@ data class StoryEntity(
     val description: String?,
 
     @Column
-    val category: Category,
+    val category: String,
 
     @Column
     val startDate: LocalDateTime?,
@@ -33,7 +33,7 @@ data class StoryEntity(
     val endDate: LocalDateTime?,
 
     @Column
-    val status: StoryStatus,
+    val status: String,
 
     @CreatedDate
     @Column
@@ -49,7 +49,7 @@ data class StoryEntity(
         authorId = authorId,
         title = title,
         description = description,
-        category = category,
+        category = Category.valueOf(category.uppercase()),
         startDate = startDate!!,
         endDate = endDate!!,
         createdAt = createdAt!!,
