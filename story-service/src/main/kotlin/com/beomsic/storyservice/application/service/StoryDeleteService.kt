@@ -13,8 +13,8 @@ class StoryDeleteService(
 ) : StoryDeleteUseCase {
 
     @Transactional
-    override fun execute(storyId: Long) {
-        storyDeletePort.deleteStory(storyId)
-        storyOutboxPort.saveOutboxMessage(storyId);
+    override suspend fun execute(userId: Long, storyId: Long) {
+        storyDeletePort.deleteStory(userId, storyId)
+        storyOutboxPort.saveStoryDeleteMessage(storyId);
     }
 }

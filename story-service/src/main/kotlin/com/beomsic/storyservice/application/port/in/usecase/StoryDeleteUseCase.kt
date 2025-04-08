@@ -1,5 +1,5 @@
 package com.beomsic.storyservice.application.port.`in`.usecase
 
 interface StoryDeleteUseCase {
-    fun execute(storyId: Long)
+    suspend fun execute(userId: Long, storyId: Long)
 }

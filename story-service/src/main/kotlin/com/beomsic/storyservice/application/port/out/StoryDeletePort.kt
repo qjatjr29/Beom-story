@@ -1,5 +1,5 @@
 package com.beomsic.storyservice.application.port.out
 
 interface StoryDeletePort {
-    fun deleteStory(storyId: Long)
+    suspend fun deleteStory(userId: Long, storyId: Long)
 }
