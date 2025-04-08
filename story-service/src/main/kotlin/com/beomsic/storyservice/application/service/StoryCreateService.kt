@@ -4,7 +4,7 @@ import com.beomsic.storyservice.adapter.out.service.UserWebClient
 import com.beomsic.storyservice.application.port.`in`.command.StoryCreateCommand
 import com.beomsic.storyservice.application.port.`in`.usecase.StoryCreateUseCase
 import com.beomsic.storyservice.application.port.out.StoryCreatePort
-import com.beomsic.storyservice.domain.Story
+import com.beomsic.storyservice.domain.model.Story
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
