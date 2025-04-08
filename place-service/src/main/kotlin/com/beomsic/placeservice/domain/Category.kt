@@ -1,5 +1,7 @@
 package com.beomsic.placeservice.domain
 
+import java.util.*
+
 enum class Category (val value: String) {
     RESTAURANT("음식점"),
     CAFE("카페"),
@@ -12,7 +14,7 @@ enum class Category (val value: String) {
 
     companion object {
         fun fromValue(value: String): Category {
-            return entries.find { it.value == value } ?: OTHER
+            return entries.find { it.name.lowercase(Locale.ENGLISH) == value.lowercase() } ?: OTHER
         }
     }
 }

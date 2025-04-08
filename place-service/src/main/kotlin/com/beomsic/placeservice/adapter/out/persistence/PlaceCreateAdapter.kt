@@ -17,7 +17,7 @@ class PlaceCreateAdapter(
             name = command.name,
             description = command.description,
             imageUrl = command.imageUrl,
-            category = command.category,
+            category = command.category.name,
             latitude = command.latitude,
             longitude = command.longitude
         )

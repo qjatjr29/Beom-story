@@ -11,11 +11,10 @@ class PlaceFindService(
 ): PlaceFindUseCase {
 
     override suspend fun findAllByStoryId(storyId: Long): List<Place> {
-        val entities = placeFindPort.findAllByStoryId(storyId)
-        return entities.map { it.toDomain() }
+        return placeFindPort.findAllByStoryId(storyId)
     }
 
     override suspend fun findByPlaceId(placeId: Long): Place {
-        return placeFindPort.findByPlaceId(placeId).toDomain()
+        return placeFindPort.findByPlaceId(placeId)
     }
 }
