@@ -1,6 +1,6 @@
 package com.beomsic.placeservice.application.service
 
-import com.beomsic.common.event.ImageRollbackEvent
+import com.beomsic.common.infra.kafka.event.ImageRollbackEvent
 import com.beomsic.placeservice.adapter.out.external.service.ImageWebClient
 import com.beomsic.placeservice.application.port.`in`.command.PlaceCreateCommand
 import com.beomsic.placeservice.application.port.`in`.usecase.PlaceCreateUseCase
@@ -32,7 +32,7 @@ class PlaceCreateService(
             return placeCreatePort.create(command)
         } catch (ex: Exception) {
             if (uploadedImageUrl != null) {
-                eventPublisher.publishImageEvent(ImageRollbackEvent(uploadedImageUrl))
+                eventPublisher.publishImageRollbackEvent(ImageRollbackEvent(uploadedImageUrl))
             }
             throw ServerException(ex.message ?: "Server Exception", ex)
         }

@@ -1,6 +1,6 @@
 package com.beomsic.placeservice.application.service
 
-import com.beomsic.common.event.ImageRollbackEvent
+import com.beomsic.common.infra.kafka.event.ImageRollbackEvent
 import com.beomsic.placeservice.adapter.out.external.service.ImageWebClient
 import com.beomsic.placeservice.application.port.`in`.command.PlaceUpdateCommand
 import com.beomsic.placeservice.application.port.`in`.usecase.PlaceUpdateUseCase
@@ -47,7 +47,7 @@ class PlaceUpdateService(
         placeUpdatePort.updateImage(placeId, newImageUrl)
 
         oldImageUrl?.let {
-            eventPublisher.publishImageEvent(ImageRollbackEvent(oldImageUrl))
+            eventPublisher.publishImageRollbackEvent(ImageRollbackEvent(oldImageUrl))
         }
     }
 
