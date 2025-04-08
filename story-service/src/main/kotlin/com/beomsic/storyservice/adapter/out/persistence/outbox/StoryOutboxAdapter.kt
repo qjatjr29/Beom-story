@@ -1,10 +1,8 @@
-package com.beomsic.storyservice.adapter.out.persistence
+package com.beomsic.storyservice.adapter.out.persistence.outbox
 
 import com.beomsic.storyservice.application.port.out.StoryOutboxPort
 import com.beomsic.storyservice.domain.outbox.StoryDeletedOutboxPayload
 import com.beomsic.storyservice.domain.outbox.StoryOutboxType
-import com.beomsic.storyservice.infrastructure.persistence.StoryOutbox
-import com.beomsic.storyservice.infrastructure.persistence.StoryOutboxRepository
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.stereotype.Component
@@ -14,7 +12,7 @@ class StoryOutboxAdapter(
     private val storyOutboxRepository: StoryOutboxRepository,
 ): StoryOutboxPort {
 
-    override fun saveOutboxMessage(storyId: Long) {
+    override suspend fun saveStoryDeleteMessage(storyId: Long) {
 
         val outboxType = StoryOutboxType.STORY_DELETED
         val payload = StoryDeletedOutboxPayload(outboxType, storyId)
@@ -23,8 +21,7 @@ class StoryOutboxAdapter(
         val outbox = StoryOutbox(
             storyId = storyId,
             payload = serializedPayload,
-//            payload = payload,
-            outboxType = outboxType,
+            outboxType = outboxType.name,
         )
 
         storyOutboxRepository.save(outbox)

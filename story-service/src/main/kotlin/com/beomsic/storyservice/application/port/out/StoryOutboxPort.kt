@@ -1,5 +1,5 @@
 package com.beomsic.storyservice.application.port.out
 
 interface StoryOutboxPort {
-    fun saveOutboxMessage(storyId: Long)
+    suspend fun saveStoryDeleteMessage(storyId: Long)
 }
