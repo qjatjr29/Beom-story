@@ -1,6 +1,6 @@
 package com.beomsic.placeservice.infra
 
-import com.beomsic.common.event.ImageEvent
+import com.beomsic.common.infra.kafka.event.ImageRollbackEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class EventPublisher(
     private val eventPublisher: ApplicationEventPublisher,
 ) {
-    fun publishImageEvent(event: ImageEvent) {
+    fun publishImageRollbackEvent(event: ImageRollbackEvent) {
         eventPublisher.publishEvent(event)
     }
 }

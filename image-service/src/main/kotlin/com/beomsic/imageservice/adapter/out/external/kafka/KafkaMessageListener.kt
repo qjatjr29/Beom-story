@@ -1,7 +1,7 @@
 package com.beomsic.imageservice.adapter.out.external.kafka
 
-import com.beomsic.common.event.ImageEvent
-import com.beomsic.common.event.ImageRollbackEvent
+import com.beomsic.common.infra.kafka.event.ImageRollbackEvent
+import com.beomsic.common.infra.kafka.event.KafkaEvent
 import com.beomsic.imageservice.application.service.KafkaListenerService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.annotation.KafkaListener
@@ -13,7 +13,7 @@ class KafkaMessageListener(
     private val kafkaListenerService: KafkaListenerService
 ){
     @KafkaListener(topics = ["\${kafka.topic.rollback-image}"], groupId = "group-id")
-    suspend fun handlePlaceCreationFailedEvent(event: ImageEvent) {
+    suspend fun handlePlaceCreationFailedEvent(event: KafkaEvent) {
         when (event) {
             is ImageRollbackEvent -> kafkaListenerService.rollbackImage(event.imageUrl)
         }
