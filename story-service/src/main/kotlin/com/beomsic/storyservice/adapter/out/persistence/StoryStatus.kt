@@ -3,9 +3,9 @@ package com.beomsic.storyservice.adapter.out.persistence
 import java.util.*
 
 enum class StoryStatus {
-    DRAFT,          // 임시 저장
-    ARCHIVED,       // 보관됨
-    DELETED         // 삭제됨
+    DRAFT,
+    ARCHIVED,
+    DELETED
     ;
 
     companion object {
