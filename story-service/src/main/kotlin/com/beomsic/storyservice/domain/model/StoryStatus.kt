@@ -1,4 +1,4 @@
-package com.beomsic.storyservice.adapter.out.persistence
+package com.beomsic.storyservice.domain.model
 
 import java.util.*
 

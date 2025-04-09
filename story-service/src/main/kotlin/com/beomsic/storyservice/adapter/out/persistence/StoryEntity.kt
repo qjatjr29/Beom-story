@@ -2,6 +2,7 @@ package com.beomsic.storyservice.adapter.out.persistence
 
 import com.beomsic.storyservice.domain.model.Category
 import com.beomsic.storyservice.domain.model.Story
+import com.beomsic.storyservice.domain.model.StoryStatus
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
@@ -50,6 +51,7 @@ data class StoryEntity(
         title = title,
         description = description,
         category = Category.valueOf(category.uppercase()),
+        status = StoryStatus.valueOf(status.uppercase()),
         startDate = startDate!!,
         endDate = endDate!!,
         createdAt = createdAt!!,

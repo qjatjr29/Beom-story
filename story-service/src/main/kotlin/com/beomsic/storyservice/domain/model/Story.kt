@@ -8,6 +8,7 @@ data class Story(
     val title: String,
     val description: String?,
     val category: Category,
+    val status: StoryStatus,
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,
     val createdAt: LocalDateTime,
