@@ -12,6 +12,7 @@ data class Place (
     val category: Category? = Category.OTHER,
     val latitude: Double?,
     val longitude: Double?,
+    val address: String?,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime
 )
