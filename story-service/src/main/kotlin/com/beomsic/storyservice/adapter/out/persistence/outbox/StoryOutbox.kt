@@ -14,9 +14,6 @@ class StoryOutbox(
     @Column("story_id")
     val storyId: Long,
 
-    @Column("outbox_type")
-    val outboxType: String,
-
     @Column
     val payload: String,
 

@@ -1,8 +1,9 @@
 package com.beomsic.storyservice.adapter.out.persistence.outbox
 
+//import com.beomsic.common.event.StoryDeletedOutboxPayload
+import com.beomsic.common.infra.kafka.story.StoryOutboxPayload
+import com.beomsic.common.infra.kafka.story.StoryOutboxType
 import com.beomsic.storyservice.application.port.out.StoryOutboxPort
-import com.beomsic.storyservice.domain.outbox.StoryDeletedOutboxPayload
-import com.beomsic.storyservice.domain.outbox.StoryOutboxType
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.stereotype.Component
@@ -13,17 +14,12 @@ class StoryOutboxAdapter(
 ): StoryOutboxPort {
 
     override suspend fun saveStoryDeleteMessage(storyId: Long) {
-
-        val outboxType = StoryOutboxType.STORY_DELETED
-        val payload = StoryDeletedOutboxPayload(outboxType, storyId)
-        val serializedPayload = Json.encodeToString(payload)
-
+        val outboxPayload = StoryOutboxPayload(type = StoryOutboxType.STORY_DELETED, storyId = storyId)
+        val serializedPayload = Json.encodeToString(outboxPayload)
         val outbox = StoryOutbox(
             storyId = storyId,
             payload = serializedPayload,
-            outboxType = outboxType.name,
         )
-
         storyOutboxRepository.save(outbox)
     }
 }
