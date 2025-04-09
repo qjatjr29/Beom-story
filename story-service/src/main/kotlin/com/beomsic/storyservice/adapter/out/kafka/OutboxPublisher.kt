@@ -1,4 +1,4 @@
-package com.beomsic.storyservice.infrastructure
+package com.beomsic.storyservice.adapter.out.kafka
 
 import com.beomsic.storyservice.adapter.out.persistence.outbox.StoryOutbox
 import com.beomsic.storyservice.adapter.out.persistence.outbox.StoryOutboxRepository
@@ -7,7 +7,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.future.await
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.data.domain.Pageable
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -28,7 +27,6 @@ class OutboxPublisher(
     @Transactional
     suspend fun publishPendingMessages() {
 
-        val pageable = Pageable.ofSize(batchSize)
         val pendingMessages = outboxRepository.findAllByOrderByCreatedAtAsc(batchSize)
 
         if (pendingMessages.isEmpty()) {
