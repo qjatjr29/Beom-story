@@ -19,7 +19,8 @@ class PlaceCreateAdapter(
             imageUrl = command.imageUrl,
             category = command.category.name,
             latitude = command.latitude,
-            longitude = command.longitude
+            longitude = command.longitude,
+            address = command.address,
         )
 
         val placeEntity = placeRepository.save(entity)

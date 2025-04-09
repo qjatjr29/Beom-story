@@ -13,6 +13,7 @@ data class PlaceDetailResponse (
     val category: Category?,
     val latitude: Double?,
     val longitude: Double?,
+    val address: String?,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
 ) {
@@ -27,6 +28,7 @@ data class PlaceDetailResponse (
                 category = category,
                 latitude = latitude,
                 longitude = longitude,
+                address = address,
                 createdAt = createdAt,
                 updatedAt = updatedAt
             )

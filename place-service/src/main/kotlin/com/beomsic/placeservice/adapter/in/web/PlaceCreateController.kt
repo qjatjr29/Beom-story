@@ -38,7 +38,8 @@ class PlaceCreateController(
             description = this.description,
             category = Category.fromValue(this.category),
             longitude = this.longitude,
-            latitude = this.latitude
+            latitude = this.latitude,
+            address = this.address,
         )
     }
 }

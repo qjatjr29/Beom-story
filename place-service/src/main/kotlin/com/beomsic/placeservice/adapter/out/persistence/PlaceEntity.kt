@@ -22,22 +22,25 @@ data class PlaceEntity(
     val authorId: Long,
 
     @Column
-    var name: String,
+    val name: String,
 
     @Column
-    var description: String?,
+    val description: String?,
 
     @Column
-    var imageUrl: String?,
+    val imageUrl: String?,
 
     @Column
-    var category: String,
+    val category: String,
 
     @Column
-    var latitude: Double?,
+    val latitude: Double?,
 
     @Column
-    var longitude: Double?,
+    val longitude: Double?,
+
+    @Column
+    val address: String?,
 
     @CreatedDate
     @Column
@@ -58,6 +61,7 @@ data class PlaceEntity(
             category = Category.fromValue(category),
             latitude = latitude,
             longitude = longitude,
+            address = address,
             createdAt = createdAt!!,
             updatedAt = updatedAt!!
         )

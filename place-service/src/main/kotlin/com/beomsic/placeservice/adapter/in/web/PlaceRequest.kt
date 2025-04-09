@@ -7,6 +7,7 @@ data class PlaceCreateRequest(
     val category: String,
     val latitude: Double,
     val longitude: Double,
+    val address: String?,
 )
 
 data class PlaceUpdateContentRequest(
@@ -15,4 +16,5 @@ data class PlaceUpdateContentRequest(
     val category: String,
     val latitude: Double,
     val longitude: Double,
+    val address: String?,
 )

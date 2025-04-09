@@ -11,4 +11,5 @@ data class PlaceCreateCommand (
     val category: Category,
     val latitude: Double?,
     val longitude: Double?,
+    val address: String?,
 )

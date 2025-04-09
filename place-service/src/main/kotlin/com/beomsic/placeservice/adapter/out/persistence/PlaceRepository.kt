@@ -5,6 +5,7 @@ import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 
 interface PlaceRepository : CoroutineCrudRepository<PlaceEntity, Long> {
     suspend fun findAllByStoryId(storyId: Long): List<PlaceEntity>
+    suspend fun deleteAllByStoryId(storyId: Long)
 }
 
 suspend fun PlaceRepository.findByIdOrNull(id: Long): PlaceEntity {
