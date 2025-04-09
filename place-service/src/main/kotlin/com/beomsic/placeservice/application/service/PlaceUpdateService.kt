@@ -21,13 +21,14 @@ class PlaceUpdateService(
     private val eventPublisher: EventPublisher
 ): PlaceUpdateUseCase {
 
+    @Transactional
     override suspend fun updateContent(command: PlaceUpdateCommand): Place {
         val existingPlace = placeFindPort.findByPlaceId(command.placeId)
 
         if (existingPlace.authorId != command.authorId) {
             throw ForbiddenException()
         }
-        return placeUpdatePort.updateContent(placeId = command.placeId, command = command).toDomain()
+        return placeUpdatePort.updateContent(placeId = command.placeId, command = command)
     }
 
 
