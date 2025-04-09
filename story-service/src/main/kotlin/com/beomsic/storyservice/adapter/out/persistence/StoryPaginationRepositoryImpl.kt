@@ -52,7 +52,7 @@ class StoryPaginationRepositoryImpl(
             },
             countQuery = {
                 databaseClient.sql("SELECT COUNT(*) FROM story WHERE author_id = :userId")
-                    .bind("authorId", userId)
+                    .bind("userId", userId)
                     .map { row, _ -> row.get(0, java.lang.Long::class.java)?.toLong() ?: 0L }
                     .first()
                     .awaitSingle()
