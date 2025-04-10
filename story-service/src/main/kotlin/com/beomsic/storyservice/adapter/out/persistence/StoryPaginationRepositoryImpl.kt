@@ -100,7 +100,7 @@ class StoryPaginationRepositoryImpl(
         return paginate(
             pageable = pageable,
             contentQuery = { executeStoryQuery(contentSql, binds) },
-            countQuery = { executeCountQuery(countSql, binds) }
+            countQuery = { executeCountQuery(countSql, mapOf("userId" to userId, "status" to storyStatus.name)) }
         )
     }
 
