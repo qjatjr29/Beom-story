@@ -16,6 +16,10 @@ class StoryFindAdapter(
         return storyEntity.toDomain()
     }
 
+    override suspend fun findAll(pageable: Pageable): Page<Story> {
+        return storyRepository.findAllWithPaging(pageable).map { it.toDomain() }
+    }
+
     override suspend fun findAllByUserId(userId: Long, pageable: Pageable): Page<Story> {
         return storyRepository.findAllByUserIdWithPaging(userId, pageable).map { it.toDomain() }
     }

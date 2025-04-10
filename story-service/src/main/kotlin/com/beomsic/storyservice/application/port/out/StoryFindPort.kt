@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable
 
 interface StoryFindPort {
     suspend fun getById(id: Long): Story
+    suspend fun findAll(pageable: Pageable): Page<Story>
     suspend fun findAllByUserId(userId: Long, pageable: Pageable): Page<Story>
     suspend fun findAllByUserIdAndStatus(userId: Long, status: String, pageable: Pageable): Page<Story>
 }

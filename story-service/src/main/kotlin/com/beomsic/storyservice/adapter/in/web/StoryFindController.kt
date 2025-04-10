@@ -39,6 +39,12 @@ class StoryFindController(
             .findAllMyStoriesByStatus(authUser.id, status, page, size).map { StorySummaryResponse(it) }
     }
 
+    @GetMapping
+    suspend fun findAllStories(@RequestParam("page", defaultValue = "0") page: Int,
+                               @RequestParam("size", defaultValue = "10") size: Int): Page<StorySummaryResponse> {
+        return storyFindUseCase.findAll(page, size).map { StorySummaryResponse(it) }
+    }
+
     // todo: 카테고리별 story 검색 / 키워드 기반 story 검색 / 주소 기반 story 검색
 
 
