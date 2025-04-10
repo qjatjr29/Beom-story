@@ -1,21 +1,25 @@
 package com.beomsic.placeservice.infra.config
 
+import mu.KotlinLogging
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
-import org.springframework.kafka.config.KafkaListenerContainerFactory
 import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
-import org.springframework.kafka.listener.ConcurrentMessageListenerContainer
+import org.springframework.kafka.listener.DefaultErrorHandler
 import org.springframework.kafka.support.serializer.JsonDeserializer
+import org.springframework.util.backoff.FixedBackOff
+
 
 @Configuration
 class KafkaConsumerConfig(
     @Value("\${kafka.bootstrap-servers}") private val bootstrapServers: String,
 ) {
+
+    private val logger = KotlinLogging.logger {}
 
     @Bean
     fun consumerFactory(): ConsumerFactory<String, Any> {
@@ -30,9 +34,22 @@ class KafkaConsumerConfig(
     }
 
     @Bean
-    fun kafkaListenerContainerFactory(): KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Any>> {
+    fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, Any> {
         val factory = ConcurrentKafkaListenerContainerFactory<String, Any>()
         factory.consumerFactory = consumerFactory()
+
+        // 🔁 Retry 설정 (2초 간격으로 최대 3번 시도)
+        val backOff = FixedBackOff(2000L, 3)
+
+        // ❗ 재시도 다 실패했을 때 처리할 DLT 핸들러 설정
+        val errorHandler = DefaultErrorHandler({ record, exception ->
+            logger.error(exception) { "DLT 처리: ${record.value()}" }
+            //todo: DLT topic을 만들어 수동으로 처리할 수 있도록 기능을 추가할 예정
+            // kafkaTemplate.send("dlt-topic", record.value())
+        }, backOff)
+
+        factory.setCommonErrorHandler(errorHandler)
+
         return factory
     }
 }

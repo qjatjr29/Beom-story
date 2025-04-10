@@ -13,7 +13,6 @@ class KafkaTopicConfig(private val topicProperties: KafkaTopicProperties) {
     @Bean
     fun topics(): List<NewTopic> {
         return listOf(
-            createTopic(topicProperties.storyOutbox),
             createTopic(topicProperties.rollbackImage)
         )
     }
@@ -27,22 +26,3 @@ class KafkaTopicConfig(private val topicProperties: KafkaTopicProperties) {
             .build()
     }
 }
-
-
-//@Configuration
-//class KafkaTopicConfig(
-//    @Value("\${kafka.topic.rollback-image}") val TOPIC_ROLLBACK_IMAGE: String,
-//    val kafkaAdmin: KafkaAdmin
-//) {
-//
-//    @PostConstruct
-//    fun initTopic() {
-//        kafkaAdmin.createOrModifyTopics(rollbackImageTopic())
-//    }
-//
-//    private fun rollbackImageTopic(): NewTopic =
-//        TopicBuilder.name(TOPIC_ROLLBACK_IMAGE)
-//            .partitions(1)
-//            .replicas(1)
-//            .build()
-//}
