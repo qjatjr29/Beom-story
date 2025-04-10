@@ -1,6 +1,7 @@
 package com.beomsic.placeservice.application.port.`in`.command
 
 import com.beomsic.placeservice.domain.Category
+import java.time.LocalDate
 
 data class PlaceCreateCommand (
     val storyId: Long,
@@ -12,4 +13,5 @@ data class PlaceCreateCommand (
     val latitude: Double?,
     val longitude: Double?,
     val address: String?,
+    val visitedDate: LocalDate,
 )

@@ -40,6 +40,7 @@ class PlaceCreateController(
             longitude = this.longitude,
             latitude = this.latitude,
             address = this.address,
+            visitedDate = this.visitedDate
         )
     }
 }

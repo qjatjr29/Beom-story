@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Table(name = "place")
@@ -42,6 +43,9 @@ data class PlaceEntity(
     @Column
     val address: String?,
 
+    @Column
+    val visitedDate: LocalDate,
+
     @CreatedDate
     @Column
     val createdAt: LocalDateTime? = null,
@@ -62,6 +66,7 @@ data class PlaceEntity(
             latitude = latitude,
             longitude = longitude,
             address = address,
+            visitedDate = visitedDate,
             createdAt = createdAt!!,
             updatedAt = updatedAt!!
         )

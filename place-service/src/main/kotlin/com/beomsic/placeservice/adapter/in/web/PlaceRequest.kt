@@ -1,5 +1,7 @@
 package com.beomsic.placeservice.adapter.`in`.web
 
+import java.time.LocalDate
+
 data class PlaceCreateRequest(
     val storyId: Long,
     val name: String,
@@ -8,6 +10,7 @@ data class PlaceCreateRequest(
     val latitude: Double,
     val longitude: Double,
     val address: String?,
+    val visitedDate: LocalDate,
 )
 
 data class PlaceUpdateContentRequest(
@@ -17,4 +20,5 @@ data class PlaceUpdateContentRequest(
     val latitude: Double,
     val longitude: Double,
     val address: String?,
+    val visitedDate: LocalDate,
 )

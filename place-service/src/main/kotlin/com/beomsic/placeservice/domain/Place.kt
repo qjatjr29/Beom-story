@@ -1,5 +1,6 @@
 package com.beomsic.placeservice.domain
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class Place (
@@ -13,6 +14,7 @@ data class Place (
     val latitude: Double?,
     val longitude: Double?,
     val address: String?,
+    val visitedDate: LocalDate,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime
 )

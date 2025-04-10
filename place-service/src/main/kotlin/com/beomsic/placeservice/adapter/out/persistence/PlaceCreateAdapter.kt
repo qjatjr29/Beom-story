@@ -21,6 +21,7 @@ class PlaceCreateAdapter(
             latitude = command.latitude,
             longitude = command.longitude,
             address = command.address,
+            visitedDate = command.visitedDate,
         )
 
         val placeEntity = placeRepository.save(entity)
