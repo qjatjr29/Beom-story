@@ -19,6 +19,11 @@ class StoryFindService(private val storyFindPort: StoryFindPort): StoryFindUseCa
         return storyFindPort.findAll(pageable)
     }
 
+    override suspend fun findAllByKeyword(keyword: String, page: Int, size: Int): Page<Story> {
+        val pageable = PageRequest.of(page, size)
+        return storyFindPort.findAllByKeyword(keyword, pageable)
+    }
+
     override suspend fun findAllByUserId(userId: Long, page: Int, size: Int): Page<Story> {
         val pageable = PageRequest.of(page, size)
         return storyFindPort.findAllByUserId(userId, pageable)

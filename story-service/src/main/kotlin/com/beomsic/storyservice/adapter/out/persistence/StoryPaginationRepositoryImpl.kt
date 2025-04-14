@@ -40,6 +40,36 @@ class StoryPaginationRepositoryImpl(
         )
     }
 
+    override suspend fun findAllByKeywordWithPaging(keyword: String, pageable: Pageable): Page<StoryEntity> {
+        val offset = pageable.offset
+        val size = pageable.pageSize
+
+        val binds = mapOf(
+            "keyword" to keyword,
+            "limit" to size,
+            "offset" to offset
+        )
+
+        // Full Text 기반 검색
+        val contentSql = """
+            SELECT * FROM story 
+            WHERE MATCH(title, description) AGAINST (:keyword IN BOOLEAN MODE)
+            ORDER BY created_at DESC
+            LIMIT :limit OFFSET :offset
+        """.trimIndent()
+
+        val countSql = """
+            SELECT COUNT(*) FROM story 
+            WHERE MATCH(title, description) AGAINST (:keyword IN BOOLEAN MODE)
+        """.trimIndent()
+
+        return paginate(
+            pageable = pageable,
+            contentQuery = { executeStoryQuery(contentSql, binds) },
+            countQuery = { executeCountQuery(countSql, mapOf("keyword" to keyword)) }
+        )
+    }
+
     override suspend fun findAllByUserIdWithPaging(userId: Long, pageable: Pageable): Page<StoryEntity> {
         val offset = pageable.offset
         val size = pageable.pageSize
