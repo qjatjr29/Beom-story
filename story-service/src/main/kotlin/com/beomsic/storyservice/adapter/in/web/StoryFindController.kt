@@ -45,7 +45,7 @@ class StoryFindController(
         return storyFindUseCase.findAll(page, size).map { StorySummaryResponse(it) }
     }
 
-    @GetMapping("/keywords")
+    @GetMapping("/search")
     suspend fun findAllStoriesByKeyword(@RequestParam("keyword") keyword: String,
                                         @RequestParam("page", defaultValue = "0") page: Int,
                                         @RequestParam("size", defaultValue = "10") size: Int): Page<StorySummaryResponse> {
