@@ -5,7 +5,7 @@ enum class Category (val value: String) {
     ACTIVITY("활동"),
     FOOD("맛집"),
     CULTURE("문화/예술"),
-    DAILY_RECORD("일상 기록"),
+    DAILY("일상 기록"),
     HEALTH("건강"),
     STUDY("학습"),
     WORK("업무"),
