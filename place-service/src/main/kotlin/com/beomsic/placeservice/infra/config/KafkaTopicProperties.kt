@@ -5,5 +5,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(prefix = "kafka.topic")
 data class KafkaTopicProperties(
     val rollbackImage: String,
-    val storyOutbox: String
+    val storyOutbox: String,
+    val dltTopic: String
 )

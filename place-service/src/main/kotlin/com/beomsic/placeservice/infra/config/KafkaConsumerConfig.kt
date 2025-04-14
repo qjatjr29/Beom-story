@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.listener.DefaultErrorHandler
 import org.springframework.kafka.support.serializer.JsonDeserializer
 import org.springframework.util.backoff.FixedBackOff
@@ -17,6 +18,8 @@ import org.springframework.util.backoff.FixedBackOff
 @Configuration
 class KafkaConsumerConfig(
     @Value("\${kafka.bootstrap-servers}") private val bootstrapServers: String,
+    private val kafkaTemplate: KafkaTemplate<String, Any>,
+    private val kafkaTopicProperties: KafkaTopicProperties,
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -44,8 +47,8 @@ class KafkaConsumerConfig(
         // ❗ 재시도 다 실패했을 때 처리할 DLT 핸들러 설정
         val errorHandler = DefaultErrorHandler({ record, exception ->
             logger.error(exception) { "DLT 처리: ${record.value()}" }
-            //todo: DLT topic을 만들어 수동으로 처리할 수 있도록 기능을 추가할 예정
-            // kafkaTemplate.send("dlt-topic", record.value())
+            // todo: Slack Alert 또는 모니터링 필수
+             kafkaTemplate.send(kafkaTopicProperties.dltTopic, record.value())
         }, backOff)
 
         factory.setCommonErrorHandler(errorHandler)

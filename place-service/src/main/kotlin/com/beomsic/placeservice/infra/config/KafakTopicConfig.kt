@@ -13,7 +13,8 @@ class KafkaTopicConfig(private val topicProperties: KafkaTopicProperties) {
     @Bean
     fun topics(): List<NewTopic> {
         return listOf(
-            createTopic(topicProperties.rollbackImage)
+            createTopic(topicProperties.rollbackImage),
+            createTopic(topicProperties.dltTopic)
         )
     }
 
