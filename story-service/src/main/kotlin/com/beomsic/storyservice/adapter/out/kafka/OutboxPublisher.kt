@@ -22,8 +22,7 @@ class OutboxPublisher(
 
     private val logger = KotlinLogging.logger {}
 
-    @Scheduled(fixedDelay = 15000)
-//    @Scheduled(cron = "0 */10 * * * *") // 10분 마다 실행
+    @Scheduled(cron = "0 */10 * * * *")
     @Transactional
     suspend fun publishPendingMessages() {
 
