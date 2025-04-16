@@ -96,7 +96,11 @@ jobs:
         run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
       - name: Build Docker Image
-        run: docker build -f user-service/Dockerfile --build-arg JAR_FILE=${{ secrets.JAR_FILE }} --build-arg PORT=${{ secrets.DOCKERFILE_PORT }} -t ${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }} ./user-service
+        run: docker build -f user-service/DockerFile \
+              --build-arg JAR_FILE=${{ secrets.JAR_FILE }} \
+              --build-arg PORT=${{ secrets.DOCKERFILE_PORT }} \
+              -t ${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }} \
+              ./user-service
 
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }}
