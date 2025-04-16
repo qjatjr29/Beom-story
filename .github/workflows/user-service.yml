@@ -100,7 +100,7 @@ jobs:
           docker build -f user-service/Dockerfile \
           --build-arg JAR_FILE=${{ secrets.JAR_FILE }} \
           --build-arg PORT=${{ secrets.DOCKERFILE_PORT }} \
-          -t ${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }} \
+          -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }} \
           ./user-service
 
       - name: Push Docker Image
