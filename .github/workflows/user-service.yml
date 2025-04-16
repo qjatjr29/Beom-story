@@ -10,9 +10,9 @@ jobs:
   ci:
     name: CI - Build & Test
     runs-on: ubuntu-latest
-#    defaults:
-#      run:
-#        working-directory: user-service
+    defaults:
+      run:
+        working-directory: user-service
 
     steps:
       - uses: actions/checkout@v4
@@ -33,39 +33,39 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Make application.yml
-        run: |
-          mkdir -p user-service/src/main/resources
-          touch user-service/src/main/resources/application.yml
-          echo "${{ secrets.USER_SERVICE_APPLICATION_YML }}" >> user-service/src/main/resources/application.yml
-        shell: bash
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
-
-#      - name: test common service dependencies
-#        run: ./gradlew :common-service:dependencies
-#      - name: test common service compileKotlin
-#        run: ./gradlew :common-service:compileKotlin --stacktrace
-      - name: Build common service with Gradle
-        run: ./gradlew :common-service:build --exclude-task test
-
-      - name: Build user service with Gradle
-        run: ./gradlew :user-service:clean :user-service:build --exclude-task test
-
-
 #      - name: Make application.yml
 #        run: |
-#          mkdir -p ./src/main/resources
-#          touch ./src/main/resources/application.yml
-#          echo "${{ secrets.USER_SERVICE_APPLICATION_YML }}" >> ./src/main/resources/application.yml
+#          mkdir -p user-service/src/main/resources
+#          touch user-service/src/main/resources/application.yml
+#          echo "${{ secrets.USER_SERVICE_APPLICATION_YML }}" >> user-service/src/main/resources/application.yml
 #        shell: bash
 #
 #      - name: Grant execute permission for gradlew
-#        run: chmod +x ../gradlew
+#        run: chmod +x ./gradlew
+
+##      - name: test common service dependencies
+##        run: ./gradlew :common-service:dependencies
+##      - name: test common service compileKotlin
+##        run: ./gradlew :common-service:compileKotlin --stacktrace
+#      - name: Build common service with Gradle
+#        run: ./gradlew :common-service:build --exclude-task test
 #
-#      - name: Build with Gradle
-#        run: ../gradlew clean build --exclude-task test
+#      - name: Build user service with Gradle
+#        run: ./gradlew :user-service:clean :user-service:build --exclude-task test
+
+
+      - name: Make application.yml
+        run: |
+          mkdir -p ./src/main/resources
+          touch ./src/main/resources/application.yml
+          echo "${{ secrets.USER_SERVICE_APPLICATION_YML }}" >> ./src/main/resources/application.yml
+        shell: bash
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ../gradlew
+
+      - name: Build with Gradle
+        run: ../gradlew clean build --exclude-task test
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4

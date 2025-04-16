@@ -12,7 +12,6 @@ dependencies {
 //    implementation("org.springframework.cloud:spring-cloud-starter-bus-amqp")
 //    implementation("org.springframework.cloud:spring-cloud-config-client")
 //    implementation("org.springframework.boot:spring-boot-starter-actuator:3.4.4")
-
 //    kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     implementation("at.favre.lib:bcrypt:0.9.0")
