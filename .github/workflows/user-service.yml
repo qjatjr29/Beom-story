@@ -46,7 +46,7 @@ jobs:
       - name: test common service dependencies
         run: ./gradlew :common-service:dependencies
       - name: test common service compileKotlin
-      - run: ./gradlew :common-service:compileKotlin --stacktrace
+        run: ./gradlew :common-service:compileKotlin --stacktrace
 
       - name: Build with Gradle
         run: ./gradlew :user-service:clean :user-service:build --exclude-task test
