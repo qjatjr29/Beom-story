@@ -9,6 +9,10 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
+//    implementation("org.springframework.cloud:spring-cloud-starter-bus-amqp")
+//    implementation("org.springframework.cloud:spring-cloud-config-client")
+//    implementation("org.springframework.boot:spring-boot-starter-actuator:3.4.4")
+
 //    kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     implementation("at.favre.lib:bcrypt:0.9.0")
@@ -37,18 +41,23 @@ dependencyManagement {
     }
 }
 
-docker {
-    // 이미지 이름 지정
-    val rootProjectName = rootProject.name.lowercase()
-    name = "$rootProjectName-${project.name}:${version}"
+//tasks.withType<Jar> {
+//    archiveBaseName.set("user-service")
+//    archiveVersion.set("0.0.1-SNAPSHOT")
+//}
 
-    // Dockerfile 경로 지정
-    files("../Dockerfile")
-
-    // 복사할 파일 설정 (bootJar 결과물)
-    val bootJar = tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar").get()
-    files(bootJar.archiveFile.get().asFile)
-
-    // Dockerfile에 전달할 빌드 인자 설정
-    buildArgs(mapOf("JAR_FILE" to bootJar.archiveFileName.get()))
-}
+//docker {
+//    // 이미지 이름 지정
+//    val rootProjectName = rootProject.name.lowercase()
+//    name = "$rootProjectName-${project.name}:${version}"
+//
+//    // Dockerfile 경로 지정
+//    files("../Dockerfile")
+//
+//    // 복사할 파일 설정 (bootJar 결과물)
+//    val bootJar = tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar").get()
+//    files(bootJar.archiveFile.get().asFile)
+//
+//    // Dockerfile에 전달할 빌드 인자 설정
+//    buildArgs(mapOf("JAR_FILE" to bootJar.archiveFileName.get()))
+//}

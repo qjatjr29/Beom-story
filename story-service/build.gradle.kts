@@ -4,7 +4,6 @@ dependencies {
 
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-
     // spring cloud
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
@@ -13,6 +12,9 @@ dependencies {
 
     // common module
     implementation(project(":common-service"))
+
+    // kafka
+    implementation("org.springframework.kafka:spring-kafka:3.3.2")
 
     // database
     implementation("io.asyncer:r2dbc-mysql:1.0.4")

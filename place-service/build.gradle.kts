@@ -10,6 +10,7 @@ dependencies {
 
     // kafka
     implementation("org.springframework.kafka:spring-kafka:3.3.2")
+//    implementation("org.springframework.kafka:spring-kafka-coroutines")
 
     // common module
     implementation(project(":common-service"))

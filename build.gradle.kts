@@ -1,14 +1,15 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-	kotlin("jvm") version "1.9.25"
-	kotlin("plugin.spring") version "1.9.25"
+	kotlin("jvm") version "2.1.0"
+	kotlin("plugin.spring") version "2.1.0"
 	id("org.springframework.boot") version "3.4.1"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("com.palantir.docker") version "0.35.0" apply false
-	kotlin("plugin.jpa") version "1.9.25"
+	kotlin("plugin.jpa") version "2.1.0"
+	kotlin("plugin.serialization") version "2.1.20"
 
-	kotlin("kapt") version "1.9.25"
+	kotlin("kapt") version "2.1.0"
 }
 
 java {
@@ -30,6 +31,8 @@ subprojects {
 	apply(plugin = "kotlin-spring")
 	apply(plugin = "io.spring.dependency-management")
 	apply(plugin = "kotlin-kapt")
+	apply(plugin = "kotlin-jpa")
+	apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 	apply(plugin = "org.springframework.boot")
 	apply(plugin = "com.palantir.docker")
 
@@ -44,6 +47,7 @@ subprojects {
 		implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 		implementation("org.jetbrains.kotlin:kotlin-scripting-jvm")
 		implementation("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable")
+		implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
 		testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
