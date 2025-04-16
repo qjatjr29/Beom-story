@@ -80,9 +80,6 @@ jobs:
     name: CD - Docker & Deploy
     needs: ci
     if: github.ref == 'refs/heads/main'
-    defaults:
-      run:
-        working-directory: user-service
     runs-on: ubuntu-latest
 
     steps:
