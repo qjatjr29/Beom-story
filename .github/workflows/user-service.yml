@@ -98,6 +98,18 @@ jobs:
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
+      - name: Debug Build Command
+        run: |
+          echo "JAR_FILE=${{ secrets.JAR_FILE }}"
+          echo "PORT=${{ secrets.DOCKERFILE_PORT }}"
+          echo "DOCKER_HUB_REPO=${{ secrets.DOCKER_HUB_REPO }}"
+          echo "DOCKER_HUB_USER_SERVICE_TAG=${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }}"
+          echo "docker build -f user-service/Dockerfile \
+            --build-arg JAR_FILE=${{ secrets.JAR_FILE }} \
+            --build-arg PORT=${{ secrets.DOCKERFILE_PORT }} \
+            -t ${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }} \
+            ./user-service"
+
       - name: Build Docker Image
         run: docker build -f user-service/Dockerfile \
               --build-arg JAR_FILE=${{ secrets.JAR_FILE }} \
