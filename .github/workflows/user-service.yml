@@ -119,7 +119,7 @@ jobs:
 
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }}
-
+#
 #      - name: Deploy on EC2
 #        uses: appleboy/ssh-action@v0.1.6
 #        with:
@@ -127,10 +127,10 @@ jobs:
 #          username: ec2-user
 #          key: ${{ secrets.EC2_SSH_KEY }}
 #          script: |
-#            docker pull ${{ secrets.DOCKER_HUB_REPO }}
+#            docker pull ${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }}
 #            docker stop user-service || true
 #            docker rm user-service || true
 #            docker run -d \
 #              --name user-service \
-#              -p ${{ secrets.DOCKERFILE_PORT }}:${{ secrets.DOCKERFILE_PORT }} \
-#              ${{ secrets.DOCKER_HUB_REPO }}
+#              -p ${{ secrets.USER_SERVICE_PORT }}:${{ secrets.DOCKERFILE_PORT }} \
+#              ${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }}
