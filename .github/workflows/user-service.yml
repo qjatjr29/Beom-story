@@ -174,14 +174,14 @@ jobs:
         run: |
           mkdir -p ./src/main/resources
           touch ./src/main/resources/application.yml
-          echo "${{ secrets.APPLICATION_YML }}" >> ./src/main/resources/application.yml
+          echo "${{ secrets.USER_SERVICE_APPLICATION_YML }}" >> ./src/main/resources/application.yml
         shell: bash
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x ../gradlew
 
       - name: Build with Gradle
-        run: ./gradlew clean build --exclude-task test
+        run: ../gradlew clean build --exclude-task test
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
