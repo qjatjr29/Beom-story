@@ -1,7 +1,7 @@
 FROM openjdk:17-oracle
 
 # 포트 설정 (내부 포트)
-EXPOSE 8080
+EXPOSE 8761
 
 # JAR 파일 인자 설정
 ARG JAR_FILE=build/libs/*.jar
