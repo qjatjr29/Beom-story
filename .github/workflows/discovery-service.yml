@@ -107,18 +107,13 @@ jobs:
           password: ${{ secrets.NCP_SERVER_PASSWORD }}
           port: ${{ secrets.NCP_SERVER_PORT }}
           script: |
-          # Docker Hub 로그인
             echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | sudo docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
-          # 기존 컨테이너 정리
             sudo docker stop discovery-service || true
             sudo docker rm discovery-service || true
 
-          # 최신 이미지 풀링
             sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
 
-          # 새 컨테이너 실행
             sudo docker run -d --name discovery-service --network=beomstory_network -p ${{ secrets.DISCOVERY_SERVICE_PORT }}:8761 ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
 
-          # 사용하지 않는 이미지 정리
             sudo docker image prune -f
