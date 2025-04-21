@@ -1,0 +1,122 @@
+name: Build and Deploy discovery-service
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "discovery-service/**"
+
+jobs:
+  ci:
+    name: CI - Build & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: discovery-service
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Make application.yml
+        run: |
+          mkdir -p ./src/main/resources
+          touch ./src/main/resources/application.yml
+          echo "${{ secrets.DISCOVERY_SERVICE_APPLICATION_YML }}" >> ./src/main/resources/application.yml
+        shell: bash
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ../gradlew
+
+#      - name: Build common service with Gradle
+#        run: ../gradlew :common-service:build --exclude-task test
+
+      - name: Build with Gradle
+        run: ../gradlew :discovery-service:clean :discovery-service:build --exclude-task test
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: discovery-service-jar
+          path: discovery-service/build/libs/*.jar
+
+  cd:
+    name: CD - Docker & Deploy
+    needs: ci
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: discovery-service-jar
+          path: discovery-service/build/libs
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+      - name: Build Docker Image
+        run: |
+          docker build -f user-service/Dockerfile \
+          --build-arg JAR_FILE=${{ secrets.JAR_FILE }} \
+          --build-arg PORT=${{ secrets.DOCKERFILE_PORT }} \
+          -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }} \
+          ./user-service
+
+      - name: Push Docker Image
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
+
+#      - name: Deploy on EC2
+#        uses: appleboy/ssh-action@v0.1.6
+#        with:
+#          host: ${{ secrets.EC2_HOST }}
+#          username: ec2-user
+#          key: ${{ secrets.EC2_SSH_KEY }}
+#          script: |
+#            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }}
+#            docker stop user-service || true
+#            docker rm user-service || true
+#            docker run -d \
+#              --name user-service \
+#              -p ${{ secrets.USER_SERVICE_PORT }}:${{ secrets.DOCKERFILE_PORT }} \
+#              ${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }}
+
+      - name: Deploy on NCP
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.NCP_SERVER_HOST }}
+          username: ${{ secrets.NCP_SERVER_USERNAME }}
+          password: ${{ secrets.NCP_SERVER_PASSWORD }}
+          port: ${{ secrets.NCP_SERVER_PORT }}
+          script: |
+            echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | sudo docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
+            sudo docker stop user-service || true
+            sudo docker rm user-service || true
+            sudo --\
+              -p ${{ secrets.DISCOVERY_SERVICE_PORT }}:${{ secrets.DISCOVERY_SERVICE_PORT }} \
+              ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
+#            sudo docker-compose up -d
+#
+#            sudo docker image prune -f
