@@ -129,10 +129,10 @@ jobs:
 
             # 새 컨테이너 실행 (포트 매핑 수정)
             sudo docker run -d \
-                --name discovery-service \
-                --network=beomstory_network \
-                -p ${{ secrets.DISCOVERY_SERVICE_PORT }}:8761 \  # Dockerfile의 EXPOSE 포트(8761)와 매핑
-                ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
+              --name discovery-service \
+              --network=beomstory_network \
+              -p ${{ secrets.DISCOVERY_SERVICE_PORT }}:8761 \  # Dockerfile의 EXPOSE 포트(8761)와 매핑
+              ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
 
             # 사용하지 않는 이미지 정리
             sudo docker image prune -f
