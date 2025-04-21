@@ -76,7 +76,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -f user-service/Dockerfile \
+          docker build -f discovery-service/Dockerfile \
           --build-arg JAR_FILE=${{ secrets.JAR_FILE }} \
           --build-arg PORT=${{ secrets.DOCKERFILE_PORT }} \
           -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }} \
@@ -112,8 +112,8 @@ jobs:
 
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
-            sudo docker stop user-service || true
-            sudo docker rm user-service || true
+            sudo docker stop discovery-service || true
+            sudo docker rm discovery-service || true
             sudo --\
               -p ${{ secrets.DISCOVERY_SERVICE_PORT }}:${{ secrets.DISCOVERY_SERVICE_PORT }} \
               ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
