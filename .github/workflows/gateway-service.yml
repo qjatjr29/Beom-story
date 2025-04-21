@@ -103,7 +103,7 @@ jobs:
               -e SPRING_MAIN_WEB-APPLICATION-TYPE=reactive \
               -e REDIS_HOST=beomstory-redis \
               -e REDIS_PORT=6379 \
-              -e EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE=http://discovery-service:${{ secrets.DISCOVERY_SERVICE_PORT }}/eureka/ \
+              -e EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE=http://discovery-service:8761/eureka/ \
               -e TOKEN_SECRET=${{ secrets.TOKEN_SECRET }} \
               ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_GATEWAY_SERVICE_TAG }}
 #            sudo docker run -d --name gateway-service --network=beomstory_network -p ${{ secrets.GATEWAY_SERVICE_PORT }}:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_GATEWAY_SERVICE_TAG }}
