@@ -78,9 +78,9 @@ jobs:
         run: |
           docker build -f discovery-service/Dockerfile \
           --build-arg JAR_FILE=${{ secrets.JAR_FILE }} \
-          --build-arg PORT=${{ secrets.DOCKERFILE_PORT }} \
+#          --build-arg PORT=${{ secrets.DOCKERFILE_PORT }} \
           -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }} \
-          ./user-service
+          ./discovery-service
 
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
