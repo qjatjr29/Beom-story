@@ -112,7 +112,7 @@ jobs:
               -e REDIS_HOST=beomstory-redis \
               -e REDIS_PORT=6379 \
               -e EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://discovery-service:8761/eureka/ \
-              -e TOKEN_SECRET=${{ secrets.TOKEN_SECRET }} \
+#              -e TOKEN_SECRET=${{ secrets.TOKEN_SECRET }} \
               ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }}
             sudo docker image prune -f
 
