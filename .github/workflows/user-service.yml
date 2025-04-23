@@ -108,14 +108,14 @@ jobs:
               --network=beomstory_network \
               -p ${{ secrets.USER_SERVICE_PORT }}:${{ secrets.DOCKERFILE_PORT }}  \
               -e SPRING_APPLICATION_NAME=user-service \
-              -e SPRING_R2DBC_URL=r2dbc:mysql://${{ secrets.NCP_SERVER_HOST }}:3306/beomstory?useSSL=false&serverZoneId=Asia/Seoul&allowPublicKeyRetrieval=true
+              -e SPRING_R2DBC_URL=r2dbc:mysql://${{ secrets.NCP_SERVER_HOST }}:3306/beomstory?useSSL=false&serverZoneId=Asia/Seoul&allowPublicKeyRetrieval=true \
               -e REDIS_HOST=${{ secrets.NCP_SERVER_HOST }} \
               -e REDIS_PORT=6379 \
               -e EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://discovery-service:8761/eureka/ \
               -e EUREKA_CLIENT_REGISTER_WITH_EUREKA=true \
               -e EUREKA_CLIENT_FETCH_REGISTRY=true \
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }}
-#            sudo docker image prune -f
+            sudo docker image prune -f
 
 #      - name: Deploy on NCP
 #        uses: appleboy/ssh-action@master
