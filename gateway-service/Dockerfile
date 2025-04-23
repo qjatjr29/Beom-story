@@ -1,5 +1,4 @@
 FROM openjdk:17-oracle
-
 # 포트 설정 (내부 포트)
 EXPOSE 8000
 

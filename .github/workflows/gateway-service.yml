@@ -80,13 +80,12 @@ jobs:
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_GATEWAY_SERVICE_TAG }}
 
-      - name: Deploy on NCP
+      - name: Deploy on EC2
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.NCP_SERVER_HOST }}
-          username: ${{ secrets.NCP_SERVER_USERNAME }}
-          password: ${{ secrets.NCP_SERVER_PASSWORD }}
-          port: ${{ secrets.NCP_SERVER_PORT }}
+          host: ${{ secrets.AWS_SERVER_HOST }}
+          username: ec2-user
+          key: ${{ secrets.AWS_EC2_SSH_KEY }}
           script: |
             echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | sudo docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
             sudo docker stop gateway-service || true
@@ -98,7 +97,7 @@ jobs:
               -p ${{ secrets.GATEWAY_SERVICE_PORT }}:8000 \
               -e SPRING_APPLICATION_NAME=gateway-service \
               -e SPRING_MAIN_WEB_APPLICATION_TYPE=reactive \
-              -e REDIS_HOST=beomstory-redis \
+              -e REDIS_HOST=${{ secrets.NCP_SERVER_HOST }}\
               -e REDIS_PORT=6379 \
               -e EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://discovery-service:8761/eureka/ \
               -e EUREKA_CLIENT_REGISTER_WITH_EUREKA=true \
@@ -116,24 +115,20 @@ jobs:
 #          port: ${{ secrets.NCP_SERVER_PORT }}
 #          script: |
 #            echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | sudo docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-#
 #            sudo docker stop gateway-service || true
 #            sudo docker rm gateway-service || true
-#
 #            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_GATEWAY_SERVICE_TAG }}
-#
 #            sudo docker run -d \
 #              --name gateway-service \
 #              --network=beomstory_network \
 #              -p ${{ secrets.GATEWAY_SERVICE_PORT }}:8000 \
 #              -e SPRING_APPLICATION_NAME=gateway-service \
-#              -e "SPRING_MAIN_WEB-APPLICATION-TYPE=reactive" \
+#              -e SPRING_MAIN_WEB_APPLICATION_TYPE=reactive \
 #              -e REDIS_HOST=beomstory-redis \
 #              -e REDIS_PORT=6379 \
-#              -e "EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE=http://discovery-service:8761/eureka/" \
-##              -e EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE=http://discovery-service:8761/eureka/ \
+#              -e EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://discovery-service:8761/eureka/ \
+#              -e EUREKA_CLIENT_REGISTER_WITH_EUREKA=true \
+#              -e EUREKA_CLIENT_FETCH_REGISTRY=true \
 #              -e TOKEN_SECRET=${{ secrets.TOKEN_SECRET }} \
 #              ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_GATEWAY_SERVICE_TAG }}
-##            sudo docker run -d --name gateway-service --network=beomstory_network -p ${{ secrets.GATEWAY_SERVICE_PORT }}:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_GATEWAY_SERVICE_TAG }}
-#
 #            sudo docker image prune -f
