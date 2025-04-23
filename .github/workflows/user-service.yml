@@ -115,7 +115,7 @@ jobs:
               -e EUREKA_CLIENT_REGISTER_WITH_EUREKA=true \
               -e EUREKA_CLIENT_FETCH_REGISTRY=true \
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }}
-            sudo docker image prune -f
+#            sudo docker image prune -f
 
 #      - name: Deploy on NCP
 #        uses: appleboy/ssh-action@master
