@@ -116,11 +116,7 @@ jobs:
               -e EUREKA_CLIENT_FETCH_REGISTRY=true \
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_USER_SERVICE_TAG }}
             sudo docker image prune -f
-  r2dbc:
-    url: r2dbc:h2:mem:///testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password: password
-    schema: classpath:schema.sql
+
 #      - name: Deploy on NCP
 #        uses: appleboy/ssh-action@master
 #        with:
