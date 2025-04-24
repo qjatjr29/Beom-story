@@ -40,12 +40,6 @@ jobs:
           echo "${{ secrets.IMAGE_SERVICE_APPLICATION_YML }}" >> ./src/main/resources/application.yml
         shell: bash
 
-      - name: Make image service schema.sql
-        run: |
-          mkdir -p ./src/main/resources
-          touch ./src/main/resources/schema.sql
-          echo "${{ secrets.IMAGE_SERVICE_SCHEMA_SQL }}" >> ./src/main/resources/schema.sql
-
       - name: Grant execute permission for gradlew
         run: chmod +x ../gradlew
 
