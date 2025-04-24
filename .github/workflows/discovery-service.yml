@@ -43,9 +43,6 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ../gradlew
 
-#      - name: Build common service with Gradle
-#        run: ../gradlew :common-service:build --exclude-task test
-
       - name: Build with Gradle
         run: ../gradlew :discovery-service:clean :discovery-service:build --exclude-task test
 
@@ -101,36 +98,3 @@ jobs:
             sudo docker run -d --name discovery-service --network=beomstory_network -p ${{ secrets.DISCOVERY_SERVICE_PORT }}:8761 ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
             
             sudo docker image prune -f
-
-#      - name: Deploy Service
-#        uses: appleboy/ssh-action@master
-#        with:
-#          username: ${{ secrets.AWS_USERNAME }}
-#          password: ${{ secrets.AWS_PASSWORD }}
-#          host: ${{ secrets.DEPLOY_HOST }}
-#          port: 22
-#          script: |
-#            sudo docker rm -f ${docker ps -qa}
-#            sudo docker pull ${{ secrets.DOCKER_REPO }}
-#            docker-compose up -d
-#            docker image prune -f
-
-
-#      - name: Deploy on NCP
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.NCP_SERVER_HOST }}
-#          username: ${{ secrets.NCP_SERVER_USERNAME }}
-#          password: ${{ secrets.NCP_SERVER_PASSWORD }}
-#          port: ${{ secrets.NCP_SERVER_PORT }}
-#          script: |
-#            echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | sudo docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-#
-#            sudo docker stop discovery-service || true
-#            sudo docker rm discovery-service || true
-#
-#            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
-#
-#            sudo docker run -d --name discovery-service --network=beomstory_network -p ${{ secrets.DISCOVERY_SERVICE_PORT }}:8761 ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_DISCOVERY_SERVICE_TAG }}
-#
-#            sudo docker image prune -f
