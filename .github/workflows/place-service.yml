@@ -1,0 +1,117 @@
+name: Build and Deploy place-service
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "place-service/**"
+
+jobs:
+  ci:
+    name: CI - Build & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: place-service
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Make application.yml
+        run: |
+          mkdir -p ./src/main/resources
+          touch ./src/main/resources/application.yml
+          echo "${{ secrets.PLACE_SERVICE_APPLICATION_YML }}" >> ./src/main/resources/application.yml
+        shell: bash
+
+      - name: Make place service schema.sql
+        run: |
+          mkdir -p ./src/main/resources
+          touch ./src/main/resources/schema.sql
+          echo "${{ secrets.PLACE_SERVICE_SCHEMA_SQL }}" >> ./src/main/resources/schema.sql
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ../gradlew
+
+      - name: Build common service with Gradle
+        run: ../gradlew :common-service:build --exclude-task test
+
+      - name: Build with Gradle
+        run: ../gradlew :place-service:clean :place-service:build --exclude-task test
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: place-service-jar
+          path: place-service/build/libs/*.jar
+
+  cd:
+    name: CD - Docker & Deploy
+    needs: ci
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: place-service-jar
+          path: place-service/build/libs
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+      - name: Build Docker Image
+        run: |
+          docker build -f place-service/Dockerfile \
+          --build-arg JAR_FILE=${{ secrets.JAR_FILE }} \
+          --build-arg PORT=${{ secrets.DOCKERFILE_PORT }} \
+          -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_PLACE_SERVICE_TAG }} \
+          ./place-service
+
+      - name: Push Docker Image
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_PLACE_SERVICE_TAG }}
+
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_SERVER_HOST }}
+          username: ec2-user
+          key: ${{ secrets.AWS_EC2_SSH_KEY }}
+          script: |
+            echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | sudo docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+            sudo docker stop place-service || true
+            sudo docker rm place-service || true
+            
+            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_PLACE_SERVICE_TAG }}
+            sudo docker run -d \
+              --name place-service \
+              --network=beomstory_network \
+              -p ${{ secrets.PLACE_SERVICE_PORT }}:${{ secrets.DOCKERFILE_PORT }}  \
+              -e SPRING_APPLICATION_NAME=place-service \
+              -e REDIS_HOST=${{ secrets.NCP_SERVER_HOST }} \
+              -e REDIS_PORT=6379 \
+              -e EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE=http://discovery-service:8761/eureka/ \
+              -e EUREKA_CLIENT_REGISTER_WITH_EUREKA=true \
+              -e EUREKA_CLIENT_FETCH_REGISTRY=true \
+            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPO }}:${{ secrets.DOCKER_HUB_PLACE_SERVICE_TAG }} 
+            sudo docker image prune -f
