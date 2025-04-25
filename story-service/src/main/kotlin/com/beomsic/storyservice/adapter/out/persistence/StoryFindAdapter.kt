@@ -20,6 +20,10 @@ class StoryFindAdapter(
         return storyRepository.findAllWithPaging(pageable).map { it.toDomain() }
     }
 
+    override suspend fun findArchivedStories(pageable: Pageable): Page<Story> {
+        return storyRepository.findArchivedStoriesWithPaging(pageable).map { it.toDomain() }
+    }
+
     override suspend fun findAllByKeyword(keyword: String, pageable: Pageable): Page<Story> {
         return storyRepository.findAllByKeywordWithPaging(keyword, pageable).map { it.toDomain() }
     }

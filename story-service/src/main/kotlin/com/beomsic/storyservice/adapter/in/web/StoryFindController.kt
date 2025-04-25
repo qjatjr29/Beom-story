@@ -31,7 +31,7 @@ class StoryFindController(
         return storyFindUseCase.findAllByUserId(userId, page, size).map { StorySummaryResponse(it) }
     }
 
-    @GetMapping("/status")
+    @GetMapping("/me/status")
     suspend fun findStoriesByStatus(@AuthToken authUser: AuthUser, @RequestParam("status") status: String,
                                     @RequestParam("page", defaultValue = "0") page: Int,
                                     @RequestParam("size", defaultValue = "10") size: Int): Page<StorySummaryResponse> {
@@ -43,6 +43,12 @@ class StoryFindController(
     suspend fun findAllStories(@RequestParam("page", defaultValue = "0") page: Int,
                                @RequestParam("size", defaultValue = "10") size: Int): Page<StorySummaryResponse> {
         return storyFindUseCase.findAll(page, size).map { StorySummaryResponse(it) }
+    }
+
+    @GetMapping("/archived")
+    suspend fun findAllArchivedStories(@RequestParam("page", defaultValue = "0") page: Int,
+                               @RequestParam("size", defaultValue = "10") size: Int): Page<StorySummaryResponse> {
+        return storyFindUseCase.findArchivedStories(page, size).map { StorySummaryResponse(it) }
     }
 
     @GetMapping("/search")

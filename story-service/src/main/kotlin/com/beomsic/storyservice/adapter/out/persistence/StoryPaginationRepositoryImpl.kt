@@ -40,6 +40,36 @@ class StoryPaginationRepositoryImpl(
         )
     }
 
+    override suspend fun findArchivedStoriesWithPaging(pageable: Pageable): Page<StoryEntity> {
+        val offset = pageable.offset
+        val size = pageable.pageSize
+        val storyStatus = StoryStatus.ARCHIVED
+
+        val binds = mapOf(
+            "limit" to size,
+            "offset" to offset,
+            "status" to storyStatus.name,
+        )
+
+        val contentSql = """
+            SELECT * FROM story
+            WHERE status = :status
+            ORDER BY created_at DESC
+            LIMIT :limit OFFSET :offset
+        """.trimIndent()
+
+        val countSql = """
+            SELECT COUNT(*) FROM story
+            WHERE status = :status
+        """.trimIndent()
+
+        return paginate(
+            pageable = pageable,
+            contentQuery = { executeStoryQuery(contentSql, binds) },
+            countQuery = { executeCountQuery(countSql, mapOf("status" to storyStatus.name)) }
+        )
+    }
+
     override suspend fun findAllByKeywordWithPaging(keyword: String, pageable: Pageable): Page<StoryEntity> {
         val offset = pageable.offset
         val size = pageable.pageSize
