@@ -22,7 +22,7 @@ class KafkaTopicConfig(private val topicProperties: KafkaTopicProperties) {
         return TopicBuilder.name(name)
             .partitions(partitions)
             .replicas(replicas)
-            .config(TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG, "2")
+            .config(TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG, "1")
             .config(TopicConfig.UNCLEAN_LEADER_ELECTION_ENABLE_CONFIG, "false")
             .build()
     }
