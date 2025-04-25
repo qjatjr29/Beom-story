@@ -19,11 +19,11 @@ class KafkaTopicConfig(private val topicProperties: KafkaTopicProperties) {
         )
     }
 
-    private fun createTopic(name: String, partitions: Int = 3, replicas: Int = 3): NewTopic {
+    private fun createTopic(name: String, partitions: Int = 1, replicas: Int = 1): NewTopic {
         return TopicBuilder.name(name)
             .partitions(partitions)
             .replicas(replicas)
-            .config(TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG, "2")
+            .config(TopicConfig.MIN_IN_SYNC_REPLICAS_CONFIG, "1")
             .config(TopicConfig.UNCLEAN_LEADER_ELECTION_ENABLE_CONFIG, "false")
             .build()
     }
