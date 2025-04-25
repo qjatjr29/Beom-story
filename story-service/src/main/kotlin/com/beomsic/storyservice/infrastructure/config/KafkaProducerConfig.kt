@@ -34,7 +34,6 @@ class KafkaProducerConfig(
         val configs = mapOf(
             AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers
         )
-        println("bootstrap servers : " + bootstrapServers)
         return KafkaAdmin(configs)
     }
 

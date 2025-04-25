@@ -18,8 +18,7 @@ class KafkaTopicConfig(private val topicProperties: KafkaTopicProperties) {
         )
     }
 
-    private fun createTopic(name: String, partitions: Int = 3, replicas: Int = 3): NewTopic {
-        println("topic name : " + name)
+    private fun createTopic(name: String, partitions: Int = 1, replicas: Int = 1): NewTopic {
         return TopicBuilder.name(name)
             .partitions(partitions)
             .replicas(replicas)
