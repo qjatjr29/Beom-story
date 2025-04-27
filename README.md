@@ -22,7 +22,7 @@
 ## 🛠 프로젝트 구조
 
 ### 🧱 ERD 
-![ERD](https://github.com/user-attachments/assets/43c29e5b-9f0d-41aa-9d1c-1d937f655a20)
+<img width="600" alt="ERD" src="https://github.com/user-attachments/assets/43c29e5b-9f0d-41aa-9d1c-1d937f655a20" />
 
 ### ⭐️ 전체 Flow
 ![전체](https://github.com/user-attachments/assets/c3a5fd23-404f-4257-b856-09ef2c35c867)
