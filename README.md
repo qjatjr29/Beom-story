@@ -22,42 +22,7 @@
 ## 🛠 프로젝트 구조
 
 ### 🧱 ERD 
-
-```mermaid
-erDiagram 
-    users ||--o{ story : ""
-    users ||--o{ place : ""
-    story ||--o{ place : ""
-
-    users {
-        BIGINT id PK
-        VARCHAR email
-        VARCHAR nickname
-        VARCHAR password
-        VARCHAR profile_url
-    }
-
-    story {
-        BIGINT id PK
-        BIGINT author_id FK
-        VARCHAR title
-        VARCHAR description
-        VARCHAR category
-        VARCHAR status
-        TIMESTAMP start_date
-        TIMESTAMP end_date
-    }
-
-    place {
-        BIGINT id PK
-        BIGINT story_id FK
-        BIGINT author_id FK
-        VARCHAR name
-        VARCHAR description
-        VARCHAR address
-        VARCHAR image_url
-    }
-```
+![ERD](https://github.com/user-attachments/assets/43c29e5b-9f0d-41aa-9d1c-1d937f655a20)
 
 ### ⭐️ 전체 Flow
 ![전체](https://github.com/user-attachments/assets/c3a5fd23-404f-4257-b856-09ef2c35c867)
