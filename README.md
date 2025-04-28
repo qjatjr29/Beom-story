@@ -238,9 +238,8 @@ SELECT * FROM table_A WHERE MATCH(title, description) AGAINST('여행' IN BOOLEA
 ### 📂 Spring Data R2DBC - Coroutine 과 Pagination
 
 **🔍 문제 상황**  
-Spring Data R2DBC는 리액티브 특성상 Page/Slice 반환을 공식 지원하지 않습니다.
-기존 JPA의 PagingAndSortingRepository처럼 자동화된 페이징이 불가능해 조회 + 총 개수 쿼리를 수동으로 결합해야 했습니다.
-
+Spring Data R2DBC는 리액티브 특성상 Page/Slice 반환을 공식 지원 ❌
+기존 JPA의 PagingAndSortingRepository처럼 자동화된 페이징이 불가능해 조회 + 총 개수 쿼리를 수동으로 결합
 **🛠️ 해결 전략** 
 
 커스텀 레포지토리 구현
@@ -295,7 +294,7 @@ template.select(StoryEntity::class)
 @Cacheable("storyCount")
 suspend fun getTotalCount(): Long
 ```
-- 개수 정보에 대해 캐싱으로 조회 성능 향상
+- 개수 정보에 대해 캐싱으로 조회 성능이 향상될 것이라 예상
 
 
 
