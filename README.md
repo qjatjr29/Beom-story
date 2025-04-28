@@ -115,6 +115,7 @@ Kotlin은 가독성과 널 처리 방식(Null Safety)이 뛰어나고 개발 생
 - 간결하게 DTO, Entity 정의를 위해 data class를 적극 활용
 - equals/hashCode/toString 자동 생성의 이점을 활용.
 
+---
 
 ### 📦 Spring data R2dbc
 **✅ 사용 이유**  
@@ -136,6 +137,8 @@ suspend fun findUserById(id: Long): User? = userRepository.findById(id)
 ```
 
 > [blog 정리](https://beomsic.tistory.com/entry/Spring-data-R2DBC)
+
+---
 
 ### 🗳️ 트랜잭션 아웃박스 패턴 + kafka
 
@@ -188,6 +191,7 @@ fun handleStoryOutboxEvent(payload: String) {
     }
 }
 ```
+---
 
 ### 🗂️ MySQL Full-Text Search
 
@@ -229,6 +233,7 @@ SELECT * FROM table_A WHERE MATCH(title, description) AGAINST('여행' IN BOOLEA
 > **코루틴 기반의 비동기 메시지 전송 방식** 으로 해결  
 > [해결 과정 - blog](https://beomsic.tistory.com/entry/%F0%9F%9A%90-Kafka-%EB%A9%94%EC%8B%9C%EC%A7%80-%EB%B0%9C%ED%96%89-%EC%B5%9C%EC%A0%81%ED%99%94-%EB%8F%99%EA%B8%B0-%EB%B0%A9%EC%8B%9D%EC%97%90%EC%84%9C-%EC%BD%94%EB%A3%A8%ED%8B%B4%EA%B9%8C%EC%A7%80%EC%9D%98-%EC%97%AC%EC%A0%95)
 
+---
 
 ### 📂 Spring Data R2DBC - Coroutine 과 Pagination
 
