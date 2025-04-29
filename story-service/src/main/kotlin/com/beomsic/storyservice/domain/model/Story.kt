@@ -1,5 +1,6 @@
 package com.beomsic.storyservice.domain.model
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class Story(
@@ -9,8 +10,8 @@ data class Story(
     val description: String?,
     val category: Category,
     val status: StoryStatus,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime,
+    val startDate: LocalDate,
+    val endDate: LocalDate,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
 )

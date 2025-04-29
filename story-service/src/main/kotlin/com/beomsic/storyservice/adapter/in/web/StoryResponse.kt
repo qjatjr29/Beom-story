@@ -1,6 +1,7 @@
 package com.beomsic.storyservice.adapter.`in`.web
 
 import com.beomsic.storyservice.domain.model.Story
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class StoryDetailResponse(
@@ -10,8 +11,8 @@ data class StoryDetailResponse(
     val description: String?,
     val category: String,
     val status: String,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime,
+    val startDate: LocalDate,
+    val endDate: LocalDate,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime
 ) {
@@ -39,8 +40,8 @@ data class StorySummaryResponse(
     val title: String,
     val category: String,
     val status: String,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime,
+    val startDate: LocalDate,
+    val endDate: LocalDate,
     val createdAt: LocalDateTime,
 ) {
     companion object {

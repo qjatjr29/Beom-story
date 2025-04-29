@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Table(name = "story")
@@ -28,10 +29,10 @@ data class StoryEntity(
     val category: String,
 
     @Column
-    val startDate: LocalDateTime?,
+    val startDate: LocalDate?,
 
     @Column
-    val endDate: LocalDateTime?,
+    val endDate: LocalDate?,
 
     @Column
     val status: String,
