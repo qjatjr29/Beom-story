@@ -13,7 +13,7 @@
 ### 🔗 링크
 [🚀 서비스](https://beomstory-front-6ssnvg27t-qjatjr29s-projects.vercel.app)  
 [🔗 프로젝트 노션 보기](https://www.notion.so/)  
-[↖️ Front 코드 보러가기 (Github)](https://www.notion.so/)
+[↖️ Front 코드 보러가기 (Github)](https://github.com/qjatjr29/beomstory-front)
 
 ### ⌛️ 프로젝트 기간
 `2025.02 ~ ing`
