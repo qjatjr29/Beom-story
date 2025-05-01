@@ -49,9 +49,10 @@ class StoryUpdateAdapterTest : BehaviorSpec({
         val status = StoryStatus.ARCHIVED
 
         `when`("작성자와 일치하면") {
+            coEvery { storyRepository.findByIdOrNull(storyId) } returns mockStoryEntity
+            coEvery { storyRepository.save(capture(updatedEntitySlot)) } answers { updatedEntitySlot.captured }
+
             then("상태가 정상적으로 업데이트된다") {
-                coEvery { storyRepository.findByIdOrNull(storyId) } returns mockStoryEntity
-                coEvery { storyRepository.save(capture(updatedEntitySlot)) } answers { updatedEntitySlot.captured }
 
                 storyUpdateAdapter.updateStatus(storyId, authorId, status.name)
 
@@ -60,9 +61,9 @@ class StoryUpdateAdapterTest : BehaviorSpec({
         }
 
         `when`("없는 스토리에 업데이트 요청을 한다면") {
-            then("StoryNotFound Exception이 발생한다") {
-                coEvery { storyRepository.findById(storyId) } returns null
+            coEvery { storyRepository.findById(storyId) } returns null
 
+            then("StoryNotFound Exception이 발생한다") {
                 shouldThrow<StoryNotFoundException> {
                     storyUpdateAdapter.updateStatus(storyId, otherUserId, status.name)
                 }.message shouldBe StoryNotFoundException().message
@@ -70,9 +71,9 @@ class StoryUpdateAdapterTest : BehaviorSpec({
         }
 
         `when`("작성자와 일치하지 않으면") {
-            then("UnauthorizedStoryAccess Exception이 발생한다") {
-                coEvery { storyRepository.findByIdOrNull(storyId) } returns mockStoryEntity
+            coEvery { storyRepository.findByIdOrNull(storyId) } returns mockStoryEntity
 
+            then("UnauthorizedStoryAccess Exception이 발생한다") {
                 shouldThrow<UnauthorizedStoryAccessException> {
                     storyUpdateAdapter.updateStatus(storyId, otherUserId, status.name)
                 }.message shouldBe UnauthorizedStoryAccessException().message
@@ -90,10 +91,10 @@ class StoryUpdateAdapterTest : BehaviorSpec({
         )
 
         `when`("작성자와 일치하면") {
-            then("스토리 정보가 업데이트된다") {
-                coEvery { storyRepository.findByIdOrNull(storyId) } returns mockStoryEntity
-                coEvery { storyRepository.save(capture(updatedEntitySlot)) } answers { updatedEntitySlot.captured }
+            coEvery { storyRepository.findByIdOrNull(storyId) } returns mockStoryEntity
+            coEvery { storyRepository.save(capture(updatedEntitySlot)) } answers { updatedEntitySlot.captured }
 
+            then("스토리 정보가 업데이트된다") {
                 storyUpdateAdapter.update(storyId, authorId, command)
 
                 with(updatedEntitySlot.captured) {
@@ -107,9 +108,9 @@ class StoryUpdateAdapterTest : BehaviorSpec({
         }
 
         `when`("없는 스토리라면") {
-            then("StoryNotFound Exception이 발생한다") {
-                coEvery { storyRepository.findById(storyId) } returns null
+            coEvery { storyRepository.findById(storyId) } returns null
 
+            then("StoryNotFound Exception이 발생한다") {
                 shouldThrow<StoryNotFoundException> {
                     storyUpdateAdapter.update(storyId, authorId, command)
                 }.message shouldBe StoryNotFoundException().message
@@ -117,9 +118,9 @@ class StoryUpdateAdapterTest : BehaviorSpec({
         }
 
         `when`("작성자와 일치하지 않으면") {
-            then("UnauthorizedStoryAccess Exception이 발생한다") {
-                coEvery { storyRepository.findByIdOrNull(storyId) } returns mockStoryEntity
+            coEvery { storyRepository.findByIdOrNull(storyId) } returns mockStoryEntity
 
+            then("UnauthorizedStoryAccess Exception이 발생한다") {
                 shouldThrow<UnauthorizedStoryAccessException> {
                     storyUpdateAdapter.update(storyId, otherUserId, command)
                 }.message shouldBe UnauthorizedStoryAccessException().message
