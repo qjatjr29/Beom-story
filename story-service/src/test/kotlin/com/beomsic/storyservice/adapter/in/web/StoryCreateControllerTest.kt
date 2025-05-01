@@ -1,7 +1,6 @@
 package com.beomsic.storyservice.adapter.`in`.web
 
 import com.beomsic.storyservice.application.port.`in`.usecase.StoryCreateUseCase
-import com.beomsic.storyservice.application.service.StoryCreateService
 import com.beomsic.storyservice.domain.model.Category
 import com.beomsic.storyservice.domain.model.Story
 import com.beomsic.storyservice.domain.model.StoryStatus
@@ -11,7 +10,6 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -19,7 +17,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @WebFluxTest(StoryCreateController::class)
-@Import(StoryCreateService::class)
 @ActiveProfiles("test")
 class StoryCreateControllerTest : BehaviorSpec({
 
