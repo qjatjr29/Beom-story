@@ -51,6 +51,13 @@ class StoryFindController(
         return storyFindUseCase.findArchivedStories(page, size).map { StorySummaryResponse(it) }
     }
 
+    @GetMapping("/status")
+    suspend fun findAllByStatus(@RequestParam("status") status: String,
+                                @RequestParam("page", defaultValue = "0") page: Int,
+                                @RequestParam("size", defaultValue = "10") size: Int): Page<StorySummaryResponse> {
+        return storyFindUseCase.findAllByStatus(status, page, size).map { StorySummaryResponse(it) }
+    }
+
     @GetMapping("/search")
     suspend fun findAllStoriesByKeyword(@RequestParam("keyword") keyword: String,
                                         @RequestParam("page", defaultValue = "0") page: Int,

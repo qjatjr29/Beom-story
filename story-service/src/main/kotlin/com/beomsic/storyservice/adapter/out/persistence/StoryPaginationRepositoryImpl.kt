@@ -60,6 +60,29 @@ class StoryPaginationRepositoryImpl(
         return PageImpl(content, pageable, total)
     }
 
+    override suspend fun findAllByStatusWithPaging(status: String, pageable: Pageable): Page<StoryEntity> {
+        val storyStatus = StoryStatus.fromValue(status).name
+
+        val query = Query.query(
+            Criteria.where("status").`is`(storyStatus)
+        )
+            .with(pageable)
+            .sort(Sort.by(Sort.Direction.DESC, "createdAt"))
+
+        val content = template.select(StoryEntity::class.java)
+            .matching(query)
+            .all()
+            .collectList()
+            .awaitFirst()
+
+        val total = template.count(
+            Query.query(Criteria.where("status").`is`(storyStatus)),
+            StoryEntity::class.java
+        ).awaitFirst()
+
+        return PageImpl(content, pageable, total)
+    }
+
     override suspend fun findAllByKeywordWithPaging(keyword: String, pageable: Pageable): Page<StoryEntity> {
         val offset = pageable.offset
         val size = pageable.pageSize

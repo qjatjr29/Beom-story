@@ -24,6 +24,11 @@ class StoryFindService(private val storyFindPort: StoryFindPort): StoryFindUseCa
         return storyFindPort.findArchivedStories(pageable)
     }
 
+    override suspend fun findAllByStatus(status: String, page: Int, size: Int): Page<Story> {
+        val pageable = PageRequest.of(page, size)
+        return storyFindPort.findAllByStatus(status, pageable)
+    }
+
     override suspend fun findAllByKeyword(keyword: String, page: Int, size: Int): Page<Story> {
         val pageable = PageRequest.of(page, size)
         return storyFindPort.findAllByKeyword(keyword, pageable)

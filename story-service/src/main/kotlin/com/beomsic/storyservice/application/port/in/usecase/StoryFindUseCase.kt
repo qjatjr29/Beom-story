@@ -7,6 +7,7 @@ interface StoryFindUseCase {
     suspend fun getById(id: Long): Story
     suspend fun findAll(page: Int, size: Int): Page<Story>
     suspend fun findArchivedStories(page: Int, size: Int): Page<Story>
+    suspend fun findAllByStatus(status: String, page: Int, size: Int): Page<Story>
     suspend fun findAllByKeyword(keyword: String, page: Int, size: Int): Page<Story>
     suspend fun findAllByUserId(userId: Long, page: Int, size: Int): Page<Story>
     suspend fun findAllMyStoriesByStatus(userId: Long, status: String, page: Int, size: Int): Page<Story>
