@@ -56,7 +56,6 @@ class StoryFindControllerIntegrationTest: BehaviorSpec({
             every { this@mockk.description } returns description
             every { this@mockk.category } returns Category.DAILY
             every { this@mockk.status } returns StoryStatus.ARCHIVED
-            every { this@mockk.description } returns description
             every { this@mockk.startDate } returns LocalDate.of(2025, 4, 1)
             every { this@mockk.endDate  } returns LocalDate.of(2025, 4, 2)
             every { this@mockk.createdAt } returns LocalDateTime.of(2025, 4, 2, 11, 11, 11)
