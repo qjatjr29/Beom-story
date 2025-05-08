@@ -61,14 +61,14 @@ class PlaceDeleteServiceTest: BehaviorSpec({
         `when`("이미지가 존재하는 장소인 경우") {
 
             coEvery { placeFindPort.findByPlaceId(placeId) } returns mockPlace
-            coEvery { placeDeletePort.deletePlace(placeId) } just Runs
+            coEvery { placeDeletePort.deleteById(placeId) } just Runs
             coEvery { imageRollbackOutboxPort.saveImageRollbackMessage(any(), any()) } just Runs
 
             then("deletePlace가 호출되고 이미지 rollback 메시지가 저장된다") {
 
-                placeDeleteService.execute(placeId)
+                placeDeleteService.deleteById(placeId, authorId)
 
-                coVerify { placeDeletePort.deletePlace(placeId) }
+                coVerify { placeDeletePort.deleteById(placeId) }
                 coVerify {
                     imageRollbackOutboxPort.saveImageRollbackMessage(
                         placeId = placeId,
@@ -81,11 +81,11 @@ class PlaceDeleteServiceTest: BehaviorSpec({
         `when`("이미지가 없는 장소 삭제") {
             val place : Place = makeMockPlace()
             coEvery { placeFindPort.findByPlaceId(placeId) } returns place
-            coEvery { placeDeletePort.deletePlace(placeId) } just Runs
+            coEvery { placeDeletePort.deleteById(placeId) } just Runs
 
             then("deletePlace는 호출되지만 rollback 메시지는 저장되지 않는다") {
-                placeDeleteService.execute(placeId)
-                coVerify { placeDeletePort.deletePlace(placeId) }
+                placeDeleteService.deleteById(placeId, authorId)
+                coVerify { placeDeletePort.deleteById(placeId) }
                 coVerify(exactly = 0) { imageRollbackOutboxPort.saveImageRollbackMessage(any(), any()) }
             }
         }
@@ -96,26 +96,26 @@ class PlaceDeleteServiceTest: BehaviorSpec({
 
             then("404 예외가 반환된다.") {
                 shouldThrow<PlaceNotFoundException> {
-                    placeDeleteService.execute(placeId)
+                    placeDeleteService.deleteById(placeId, authorId)
                 }.message shouldBe PlaceNotFoundException().message
 
                 coVerify { placeFindPort.findByPlaceId(placeId) }
-                coVerify(exactly = 0) { placeDeletePort.deletePlace(placeId) }
+                coVerify(exactly = 0) { placeDeletePort.deleteById(placeId) }
                 coVerify(exactly = 0) { imageRollbackOutboxPort.saveImageRollbackMessage(any(), any()) }
             }
         }
 
         `when`("장소 삭제과정에서 예외(에러)가 발생하는 경우") {
-
-            coEvery { placeFindPort.findByPlaceId(placeId) } returns mockPlace
-            coEvery { placeDeletePort.deletePlace(placeId) } throws RuntimeException()
+            val place : Place = makeMockPlace()
+            coEvery { placeFindPort.findByPlaceId(placeId) } returns place
+            coEvery { placeDeletePort.deleteById(placeId) } throws RuntimeException()
 
             then("해당 예외가 반환된다.") {
                 shouldThrow<RuntimeException> {
-                    placeDeleteService.execute(placeId)
+                    placeDeleteService.deleteById(placeId, authorId)
                 }
                 coVerify(exactly = 1) { placeFindPort.findByPlaceId(placeId) }
-                coVerify(exactly = 1) { placeDeletePort.deletePlace(placeId) }
+                coVerify(exactly = 1) { placeDeletePort.deleteById(placeId) }
                 coVerify(exactly = 0) { imageRollbackOutboxPort.saveImageRollbackMessage(any(), any()) }
             }
         }

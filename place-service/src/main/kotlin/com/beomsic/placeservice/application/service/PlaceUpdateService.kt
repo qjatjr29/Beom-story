@@ -7,7 +7,7 @@ import com.beomsic.placeservice.application.port.`in`.usecase.PlaceUpdateUseCase
 import com.beomsic.placeservice.application.port.out.PlaceFindPort
 import com.beomsic.placeservice.application.port.out.PlaceUpdatePort
 import com.beomsic.placeservice.domain.Place
-import com.beomsic.placeservice.domain.exception.ForbiddenException
+import com.beomsic.placeservice.domain.exception.UnauthorizedPlaceAccessException
 import com.beomsic.placeservice.infra.EventPublisher
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.stereotype.Service
@@ -26,7 +26,7 @@ class PlaceUpdateService(
         val existingPlace = placeFindPort.findByPlaceId(command.placeId)
 
         if (existingPlace.authorId != command.authorId) {
-            throw ForbiddenException()
+            throw UnauthorizedPlaceAccessException()
         }
         return placeUpdatePort.updateContent(placeId = command.placeId, command = command)
     }
@@ -39,7 +39,7 @@ class PlaceUpdateService(
         val existingPlace = placeFindPort.findByPlaceId(placeId)
 
         if (existingPlace.authorId != authorId) {
-            throw ForbiddenException()
+            throw UnauthorizedPlaceAccessException()
         }
 
         val oldImageUrl: String? = existingPlace.imageUrl

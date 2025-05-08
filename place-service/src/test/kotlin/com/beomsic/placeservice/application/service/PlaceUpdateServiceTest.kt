@@ -6,7 +6,7 @@ import com.beomsic.placeservice.application.port.out.PlaceFindPort
 import com.beomsic.placeservice.application.port.out.PlaceUpdatePort
 import com.beomsic.placeservice.domain.Category
 import com.beomsic.placeservice.domain.Place
-import com.beomsic.placeservice.domain.exception.ForbiddenException
+import com.beomsic.placeservice.domain.exception.UnauthorizedPlaceAccessException
 import com.beomsic.placeservice.infra.EventPublisher
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
@@ -74,10 +74,10 @@ class PlaceUpdateServiceTest: BehaviorSpec ({
 
             coEvery { placeFindPort.findByPlaceId(placeId) } returns existingPlace
 
-            then("ForbiddenException 이 발생한다") {
-                shouldThrow<ForbiddenException> {
+            then("UnauthorizedPlaceAccessException 이 발생한다") {
+                shouldThrow<UnauthorizedPlaceAccessException> {
                     placeUpdateService.updateContent(invalidCommand)
-                }.message shouldBe ForbiddenException().message
+                }.message shouldBe UnauthorizedPlaceAccessException().message
             }
         }
     }
@@ -108,8 +108,8 @@ class PlaceUpdateServiceTest: BehaviorSpec ({
         `when`("작성자가 아닌 경우") {
             coEvery { placeFindPort.findByPlaceId(placeId) } returns existingPlace
 
-            then("ForbiddenException이 발생한다") {
-                shouldThrow<ForbiddenException> {
+            then("UnauthorizedPlaceAccessException 발생한다") {
+                shouldThrow<UnauthorizedPlaceAccessException> {
                     placeUpdateService.updateImage(placeId, wrongAuthorId, mockFilePart)
                 }
             }

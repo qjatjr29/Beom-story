@@ -8,7 +8,7 @@ class PlaceDeleteAdapter(
     private val placeRepository: PlaceRepository,
 ): PlaceDeletePort {
 
-    override suspend fun deletePlace(id: Long) {
+    override suspend fun deleteById(id: Long) {
         placeRepository.deleteById(id)
     }
 

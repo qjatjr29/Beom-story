@@ -22,7 +22,7 @@ class PlaceDeleteAdapterTest: BehaviorSpec({
 
             then("예외가 발생하지 않고 삭제가 실행된다.") {
                 shouldNotThrow<Exception> {
-                    placeDeleteAdapter.deletePlace(placeId)
+                    placeDeleteAdapter.deleteById(placeId)
                 }
                 coVerify(exactly = 1) { placeRepository.deleteById(placeId) }
             }
@@ -33,7 +33,7 @@ class PlaceDeleteAdapterTest: BehaviorSpec({
 
             then("예외가 발생 한다") {
                 shouldThrow<RuntimeException> {
-                    placeDeleteAdapter.deletePlace(placeId)
+                    placeDeleteAdapter.deleteById(placeId)
                 }
                 coVerify(exactly = 1) { placeRepository.deleteById(placeId) }
             }
