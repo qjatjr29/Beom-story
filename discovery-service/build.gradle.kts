@@ -16,7 +16,7 @@ docker {
     name = "$rootProjectName-${project.name}:${version}"
 
     // Dockerfile 경로 지정
-    files("../Dockerfile")
+//    files("../Dockerfile")
 
     // 복사할 파일 설정 (bootJar 결과물)
     val bootJar = tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar").get()
